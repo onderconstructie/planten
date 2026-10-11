@@ -27,7 +27,7 @@ body{background:var(--desk);color:var(--ink);font-family:var(--display);display:
 .tag{font:800 3.6cqw/1 var(--display);letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:1.6cqw 3cqw;border-radius:99px;align-self:flex-start}
 .dk .tag{background:var(--paper);color:var(--ink)}
 h2{font:800 11cqw/.95 var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;text-align:center}
-.sub{font:500 5.4cqw/1.25 var(--display);text-align:center;margin:0;text-wrap:balance}
+.sub{font:700 8cqw/1.05 var(--hand);text-align:center;margin:0;text-wrap:balance}
 .note{font:700 7.4cqw/1.05 var(--hand);text-align:center;margin:0}
 .col{display:flex;flex-direction:column;gap:3cqw;align-items:center;width:100%;text-align:center}
 svg.art{width:86cqw;height:auto;overflow:visible}
@@ -318,7 +318,7 @@ def build_pilea():
 <g transform="translate(230 120)"><rect x="-38" y="0" width="76" height="60" rx="6" fill="#4A3424" stroke="{INK}" stroke-width="5"/><path d="M-30 10h60" stroke="#2F6FD6" stroke-width="7"/>
 <path class="cross" style="--cd:2.2s" d="M-24 8l48 46M24 8l-48 46" stroke="#D8263A" stroke-width="9" stroke-linecap="round"/></g>
 <text x="70" y="114" text-anchor="middle" style="font:700 22px var(--hand)">te droog</text><text x="230" y="114" text-anchor="middle" style="font:700 22px var(--hand)">te nat</text></svg>
-<div class="col"><h2 class="a d2" style="font-size:13cqw">Beter te droog</h2><p class="sub a d4">dan te nat.</p></div>'''),
+<div class="col"><h2 class="a d2" style="font-size:13cqw">Beter te droog</h2><p class="note a d4" style="font-size:10cqw;color:var(--red)">dan te nat!</p></div>'''),
       dict(dur=5200, bg='#FFF6C2', html=light_scene('<p class="note a d5" style="font-size:9cqw">maar wel véél</p>', extra='<g class="glow"><circle cx="150" cy="120" r="112" fill="none" stroke="#F5C400" stroke-width="6" stroke-dasharray="4 14"/></g>')),
       dict(dur=7400, bg='#E6F6E3', html=f'''<span class="tag a">Stekken</span>
 <svg class="art" viewBox="0 0 300 260" aria-hidden="true">
