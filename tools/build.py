@@ -654,7 +654,8 @@ def build_overview():
     import re as _re
     mini_svg = room_svg(links)
     mini_svg = _re.sub(r'<title>.*?</title>', '', mini_svg)
-    mini_svg = _re.sub(r'<a [^>]*>', '<g>', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
+    mini_svg = _re.sub(r'<rect class="hit"[^>]*/>', '', mini_svg)
+    mini_svg = _re.sub(r'<a class="([^"]*)"[^>]*>', r'<g class="\1">', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
     core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
