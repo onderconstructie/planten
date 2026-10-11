@@ -127,8 +127,10 @@ JS = r"""
     scenes[idx].classList.add('on');
     stage.classList.toggle('dark',scenes[idx].classList.contains('dk'));
     fills.forEach((f,i)=>f.style.width=i<idx?'100%':'0%');
+    document.dispatchEvent(new CustomEvent('reel:scene',{detail:idx}));
   }
   function setPlay(p){playing=p;playBtn.textContent=p?'Pauze':'Speel';stage.querySelectorAll('.scene.on *').forEach(el=>el.style.animationPlayState=p?'running':'paused')}
+  window.__reel={go:i=>{show(i);setPlay(true)}};
   function tick(t){
     const dt=t-last;last=t;
     if(playing&&!ended){
@@ -173,9 +175,13 @@ def page(slug, title, desc, scenes, extra_css=''):
     body = ''.join(
         f'<section class="scene{" dk" if s.get("dark") else ""}" data-dur="{s["dur"]}" style="background:{s["bg"]}">{s["html"]}</section>\n'
         for s in scenes)
+    _here = os.path.dirname(os.path.abspath(__file__))
+    LAYOUT_CSS = open(os.path.join(_here, 'layout.css')).read()
+    LAYOUT_JS = open(os.path.join(_here, 'layout.js')).read()
     core = f"""<title>{title}</title>
 {FONTS}
 <style>{css}{extra_css}</style>
+<style id="layout">{LAYOUT_CSS}</style>
 """
     navattr = ''
     hint = 'Veeg ← → door de fiche'
@@ -194,6 +200,7 @@ def page(slug, title, desc, scenes, extra_css=''):
 </div>
 <p class="hint">{hint}</p>
 <script>{JS}</script>
+<script id="layout-js">{LAYOUT_JS}</script>
 """
     if ARTIFACT:
         html = core + main
@@ -294,14 +301,14 @@ def build_pilea():
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}</defs></svg>'
     baby = lambda x,y,s,cls,st='': f'<g class="{cls}" style="{st}"><g transform="translate({x} {y}) scale({s})"><path d="M0 0v-18" stroke="#1E7A3C" stroke-width="4"/><use href="#pl" transform="translate(-9 -22) scale(.45)"/><use href="#pl" transform="translate(9 -26) scale(.5)"/></g></g>'
     scenes = [
-      dict(dur=5200, bg='#1E7A3C', dark=True, html=f'''{defs}<span class="tag a">Plantenfiche</span>
+      dict(dur=5200, bg='#2E9E4F', dark=True, html=f'''{defs}<span class="tag a">Plantenfiche</span>
 <svg class="art" viewBox="0 0 300 335" aria-hidden="true" style="width:80cqw">{pilea_plant()}</svg>
 <div class="col"><h2 class="a d3" style="font-size:12cqw">Pilea peperomioides</h2><p class="note a d4" style="font-size:10cqw;color:var(--pot)">de pannenkoekenplant</p></div>'''),
       dict(dur=4800, bg='#F4EEFF', html=f'''<span class="tag a">Verzorging</span>
 <svg class="art" viewBox="0 0 300 260" aria-hidden="true"><use href="#pl" transform="translate(150 130) scale(4.2)"/>{dust_wipe()}</svg>
 <div class="col"><h2 class="a d2" style="font-size:15cqw">Afstoffen</h2></div>'''),
       dict(dur=6200, bg='#DDF4F3', html=f'''<span class="tag a">Water</span>
-<svg class="art" viewBox="0 0 300 150" aria-hidden="true" style="width:70cqw">
+<svg class="art" viewBox="44 4 212 104" aria-hidden="true">
 {drop(150,10,3.2,'flash','#7FC8E8')}
 {drop(70,40,1,'drop','#0F8A8F')}{drop(230,30,1,'drop','#0F8A8F','animation-delay:.6s')}</svg>
 <div class="col" style="color:var(--teal)">
@@ -360,14 +367,14 @@ def sans_plant():
 def build_sans():
     cal = ''.join(f'<span class="{"w" if i==3 else ""}"><b>W{i+1}</b></span>' for i in range(4))
     scenes = [
-      dict(dur=5200, bg='#1E7A3C', dark=True, html=f'''<span class="tag a">Plantenfiche</span>
+      dict(dur=5200, bg='#2E9E4F', dark=True, html=f'''<span class="tag a">Plantenfiche</span>
 <svg class="art" viewBox="0 0 300 340" aria-hidden="true" style="width:74cqw">{sans_plant()}</svg>
 <div class="col"><h2 class="a d3" style="font-size:14cqw">Sansevieria</h2><p class="note a d4" style="font-size:10cqw;color:var(--pot)">de vrouwentong</p></div>'''),
       dict(dur=4800, bg='#F4EEFF', html=f'''<span class="tag a">Verzorging</span>
 <svg class="art" viewBox="0 0 300 260" aria-hidden="true">{sans_leaf(150,262,250,8,0)}{dust_wipe()}</svg>
 <h2 class="a d2" style="font-size:15cqw">Afstoffen</h2>'''),
       dict(dur=6000, bg='#E3ECFF', html=f'''<span class="tag a">Water</span>
-<svg class="art" viewBox="0 0 300 140" aria-hidden="true" style="width:60cqw">{drop(150,10,4,'flash','#7FC8E8')}</svg>
+<svg class="art" viewBox="96 0 108 124" aria-hidden="true">{drop(150,10,4,'flash','#7FC8E8')}</svg>
 <div class="col" style="color:var(--blue)">
 <h2 class="a d1" style="color:var(--ink)">Zeer weinig</h2>
 <div class="cal a d2" style="grid-template-columns:repeat(4,1fr)">{cal}</div>
@@ -412,7 +419,7 @@ def chloro_plant(runner=True):
 
 def build_chloro():
     scenes = [
-      dict(dur=5600, bg='#1E7A3C', dark=True, html=f'''<span class="tag a">Plantenfiche</span>
+      dict(dur=5600, bg='#2E9E4F', dark=True, html=f'''<span class="tag a">Plantenfiche</span>
 <svg class="art" viewBox="0 0 300 330" aria-hidden="true" style="width:80cqw">{chloro_plant()}</svg>
 <div class="col"><h2 class="a d3" style="font-size:11.5cqw">Chlorophytum comosum</h2><p class="note a d4" style="font-size:9.4cqw;color:var(--pot)">graslelie <span style="opacity:.8">(spinnenplant)</span></p></div>'''),
       dict(dur=6800, bg='#E3ECFF', html=f'''<span class="tag a">Water</span>

@@ -1,0 +1,44 @@
+/* Gedeelde compositielaag voor alle reels (wordt na de eigen stijl van elke reel ingevoegd).
+   Gsm: kader zo groot mogelijk, tekening vult de ruimte, tekst links onderaan.
+   Computer: reel links, inhoudstafel rechts. */
+
+/* --- binnen een scène --- */
+.scene{justify-content:flex-start;gap:3.2cqw;padding:15cqw 6.5cqw 7cqw}
+.scene>.tag{position:absolute;top:6.4cqw;left:6.5cqw;margin:0}
+.scene>svg.art{flex:1 1 0;min-height:0;width:100%!important;height:100%;max-width:none;align-self:stretch}
+.scene>:not(svg):not(.tag){flex:none;align-self:stretch}
+.scene h2{text-align:left;align-self:stretch}
+.scene .col{align-items:flex-start;text-align:left}
+.scene .note,.scene .sub{text-align:left;align-self:flex-start}
+.scene .col>.chip{align-self:flex-start}
+.scene>div[style]{align-items:flex-start!important;text-align:left!important}
+.scene>div[style]>.chip,.scene>div[style]>span{align-self:flex-start}
+.scene p{margin:0}
+/* scènes zonder grote tekening: inhoud in het midden van de ruimte */
+.scene:not(:has(>svg.art)){justify-content:center}
+.scene:not(:has(>svg.art)) h2{margin-bottom:1cqw}
+
+/* --- gsm: kader groter, knoppen dichter --- */
+.stage{border-radius:20px}
+
+/* --- computer: reel + inhoudstafel --- */
+.reelcol{display:contents}
+.toc{display:none}
+@media (min-width:900px) and (min-height:560px){
+  body{flex-direction:row;align-items:center;justify-content:center;gap:48px}
+  .reelcol{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .stage{width:min(calc((100dvh - 190px)*9/16),460px)!important}
+  .hint{display:none}
+  .toc{display:flex;flex-direction:column;gap:18px;width:min(360px,34vw);align-self:center}
+  .toc .eyebrow{font:800 13px var(--display);letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);border-radius:99px;padding:6px 12px;align-self:flex-start}
+  .toc h1{font:800 clamp(36px,4vw,56px)/.92 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
+  .toc .common{font:700 30px/1 var(--hand);color:var(--leaf);margin:-6px 0 0}
+  .toc ol{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:c}
+  .toc li{counter-increment:c}
+  .toc button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:38px 1fr;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;border:3px solid transparent;border-radius:14px;font:700 17px/1.1 var(--display)}
+  .toc button::before{content:counter(c,decimal-leading-zero);font:800 13px var(--display);color:var(--ink);opacity:.55;font-variant-numeric:tabular-nums}
+  .toc button:hover{background:rgba(255,253,246,.55)}
+  .toc button[aria-current="step"]{background:var(--paper);border-color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+  .toc button[aria-current="step"]::before{opacity:1}
+  .toc button:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+}

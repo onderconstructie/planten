@@ -113,12 +113,57 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 .hint{font:600 13px/1.3 var(--display);margin:0;text-align:center;opacity:.75}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}.scene .a,.shine{opacity:1}*{animation-delay:0s!important}}
 body{padding-top:calc(66px + env(safe-area-inset-top,0px))}</style>
+<style id="layout">/* Gedeelde compositielaag voor alle reels (wordt na de eigen stijl van elke reel ingevoegd).
+   Gsm: kader zo groot mogelijk, tekening vult de ruimte, tekst links onderaan.
+   Computer: reel links, inhoudstafel rechts. */
+
+/* --- binnen een scène --- */
+.scene{justify-content:flex-start;gap:3.2cqw;padding:15cqw 6.5cqw 7cqw}
+.scene>.tag{position:absolute;top:6.4cqw;left:6.5cqw;margin:0}
+.scene>svg.art{flex:1 1 0;min-height:0;width:100%!important;height:100%;max-width:none;align-self:stretch}
+.scene>:not(svg):not(.tag){flex:none;align-self:stretch}
+.scene h2{text-align:left;align-self:stretch}
+.scene .col{align-items:flex-start;text-align:left}
+.scene .note,.scene .sub{text-align:left;align-self:flex-start}
+.scene .col>.chip{align-self:flex-start}
+.scene>div[style]{align-items:flex-start!important;text-align:left!important}
+.scene>div[style]>.chip,.scene>div[style]>span{align-self:flex-start}
+.scene p{margin:0}
+/* scènes zonder grote tekening: inhoud in het midden van de ruimte */
+.scene:not(:has(>svg.art)){justify-content:center}
+.scene:not(:has(>svg.art)) h2{margin-bottom:1cqw}
+
+/* --- gsm: kader groter, knoppen dichter --- */
+.stage{border-radius:20px}
+
+/* --- computer: reel + inhoudstafel --- */
+.reelcol{display:contents}
+.toc{display:none}
+@media (min-width:900px) and (min-height:560px){
+  body{flex-direction:row;align-items:center;justify-content:center;gap:48px}
+  .reelcol{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .stage{width:min(calc((100dvh - 190px)*9/16),460px)!important}
+  .hint{display:none}
+  .toc{display:flex;flex-direction:column;gap:18px;width:min(360px,34vw);align-self:center}
+  .toc .eyebrow{font:800 13px var(--display);letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);border-radius:99px;padding:6px 12px;align-self:flex-start}
+  .toc h1{font:800 clamp(36px,4vw,56px)/.92 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
+  .toc .common{font:700 30px/1 var(--hand);color:var(--leaf);margin:-6px 0 0}
+  .toc ol{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:c}
+  .toc li{counter-increment:c}
+  .toc button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:38px 1fr;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;border:3px solid transparent;border-radius:14px;font:700 17px/1.1 var(--display)}
+  .toc button::before{content:counter(c,decimal-leading-zero);font:800 13px var(--display);color:var(--ink);opacity:.55;font-variant-numeric:tabular-nums}
+  .toc button:hover{background:rgba(255,253,246,.55)}
+  .toc button[aria-current="step"]{background:var(--paper);border-color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+  .toc button[aria-current="step"]::before{opacity:1}
+  .toc button:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+}
+</style>
 </head>
 <body>
 <a class="home" href="../"><span aria-hidden="true" style="font-size:24px;line-height:1">&larr;</span><svg viewBox="0 0 28 22" aria-hidden="true"><path d="M5 9V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4" fill="#9BB9EE" stroke="#141414" stroke-width="2"/><path d="M2 10h24v7H2Z" fill="#7FA4E6" stroke="#141414" stroke-width="2" stroke-linejoin="round"/><path d="M5 17v3M23 17v3" stroke="#141414" stroke-width="2.4" stroke-linecap="round"/></svg>Terug naar de kamer</a>
 <div class="stage" id="stage" aria-live="polite" data-nav="{&quot;prev&quot;: &quot;../pannenkoekenplant/&quot;, &quot;next&quot;: &quot;../graslelie/&quot;}">
 <div class="bars" id="bars"></div>
-<section class="scene dk" data-dur="5200" style="background:#1E7A3C"><span class="tag a">Plantenfiche</span>
+<section class="scene dk" data-dur="5200" style="background:#2E9E4F"><span class="tag a">Plantenfiche</span>
 <svg class="art" viewBox="0 0 300 340" aria-hidden="true" style="width:74cqw"><ellipse cx="170" cy="330" rx="74" ry="9" fill="#141414" opacity=".3"/><g class="rise" style="animation-delay:0.15s"><g transform="translate(116 238) rotate(-16)"><path d="M0 0C-18.7 -42.5 -15.0 -119.0 0 -170C15.0 -119.0 18.7 -42.5 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-18.7 -42.5 -15.0 -119.0 0 -170C15.0 -119.0 18.7 -42.5 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-14.0 -14.0q14.0 -5 28.0 0M-14.0 -29.0q14.0 -5 28.0 0M-14.0 -44.0q14.0 -5 28.0 0M-13.5 -59.0q13.5 -5 27.0 0M-12.7 -74.0q12.7 -5 25.4 0M-11.9 -89.0q11.9 -5 23.8 0M-11.1 -104.0q11.1 -5 22.3 0M-10.4 -119.0q10.4 -5 20.7 0M-9.6 -134.0q9.6 -5 19.2 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g><g class="rise" style="animation-delay:0.28s"><g transform="translate(132 238) rotate(-7)"><path d="M0 0C-24.2 -55.0 -19.4 -154.0 0 -220C19.4 -154.0 24.2 -55.0 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-24.2 -55.0 -19.4 -154.0 0 -220C19.4 -154.0 24.2 -55.0 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-18.1 -14.0q18.1 -5 36.3 0M-18.1 -29.0q18.1 -5 36.3 0M-18.1 -44.0q18.1 -5 36.3 0M-18.1 -59.0q18.1 -5 36.3 0M-17.6 -74.0q17.6 -5 35.1 0M-16.8 -89.0q16.8 -5 33.6 0M-16.0 -104.0q16.0 -5 32.0 0M-15.2 -119.0q15.2 -5 30.5 0M-14.5 -134.0q14.5 -5 28.9 0M-13.7 -149.0q13.7 -5 27.3 0M-12.9 -164.0q12.9 -5 25.8 0M-12.1 -179.0q12.1 -5 24.2 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g><g class="rise" style="animation-delay:0.41s"><g transform="translate(150 238) rotate(2)"><path d="M0 0C-27.5 -62.5 -22.0 -175.0 0 -250C22.0 -175.0 27.5 -62.5 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-27.5 -62.5 -22.0 -175.0 0 -250C22.0 -175.0 27.5 -62.5 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-20.6 -14.0q20.6 -5 41.2 0M-20.6 -29.0q20.6 -5 41.2 0M-20.6 -44.0q20.6 -5 41.2 0M-20.6 -59.0q20.6 -5 41.2 0M-20.5 -74.0q20.5 -5 41.0 0M-19.7 -89.0q19.7 -5 39.4 0M-18.9 -104.0q18.9 -5 37.9 0M-18.2 -119.0q18.2 -5 36.3 0M-17.4 -134.0q17.4 -5 34.7 0M-16.6 -149.0q16.6 -5 33.2 0M-15.8 -164.0q15.8 -5 31.6 0M-15.0 -179.0q15.0 -5 30.1 0M-14.3 -194.0q14.3 -5 28.5 0M-13.5 -209.0q13.5 -5 26.9 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g><g class="rise" style="animation-delay:0.54s"><g transform="translate(168 238) rotate(9)"><path d="M0 0C-22.6 -51.2 -18.0 -143.5 0 -205C18.0 -143.5 22.6 -51.2 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-22.6 -51.2 -18.0 -143.5 0 -205C18.0 -143.5 22.6 -51.2 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-16.9 -14.0q16.9 -5 33.8 0M-16.9 -29.0q16.9 -5 33.8 0M-16.9 -44.0q16.9 -5 33.8 0M-16.9 -59.0q16.9 -5 33.8 0M-16.1 -74.0q16.1 -5 32.2 0M-15.3 -89.0q15.3 -5 30.7 0M-14.6 -104.0q14.6 -5 29.1 0M-13.8 -119.0q13.8 -5 27.5 0M-13.0 -134.0q13.0 -5 26.0 0M-12.2 -149.0q12.2 -5 24.4 0M-11.4 -164.0q11.4 -5 22.9 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g><g class="rise" style="animation-delay:0.67s"><g transform="translate(184 238) rotate(17)"><path d="M0 0C-18.1 -41.2 -14.5 -115.5 0 -165C14.5 -115.5 18.1 -41.2 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-18.1 -41.2 -14.5 -115.5 0 -165C14.5 -115.5 18.1 -41.2 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-13.6 -14.0q13.6 -5 27.2 0M-13.6 -29.0q13.6 -5 27.2 0M-13.6 -44.0q13.6 -5 27.2 0M-13.0 -59.0q13.0 -5 26.0 0M-12.2 -74.0q12.2 -5 24.4 0M-11.4 -89.0q11.4 -5 22.9 0M-10.7 -104.0q10.7 -5 21.3 0M-9.9 -119.0q9.9 -5 19.8 0M-9.1 -134.0q9.1 -5 18.2 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g><g class="rise" style="animation-delay:0.80s"><g transform="translate(142 238) rotate(-2)"><path d="M0 0C-16.5 -37.5 -13.2 -105.0 0 -150C13.2 -105.0 16.5 -37.5 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-16.5 -37.5 -13.2 -105.0 0 -150C13.2 -105.0 16.5 -37.5 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-12.4 -14.0q12.4 -5 24.8 0M-12.4 -29.0q12.4 -5 24.8 0M-12.3 -44.0q12.3 -5 24.6 0M-11.5 -59.0q11.5 -5 23.1 0M-10.8 -74.0q10.8 -5 21.5 0M-10.0 -89.0q10.0 -5 20.0 0M-9.2 -104.0q9.2 -5 18.4 0M-8.4 -119.0q8.4 -5 16.8 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g><g class="rise" style="animation-delay:0.93s"><g transform="translate(162 238) rotate(5)"><path d="M0 0C-15.4 -35.0 -12.3 -98.0 0 -140C12.3 -98.0 15.4 -35.0 0 0Z" fill="#3FAE5A" stroke="#E8C21A" stroke-width="6" stroke-linejoin="round"/><path d="M0 0C-15.4 -35.0 -12.3 -98.0 0 -140C12.3 -98.0 15.4 -35.0 0 0Z" fill="none" stroke="#1E7A3C" stroke-width="2"/><path d="M-11.6 -14.0q11.6 -5 23.1 0M-11.6 -29.0q11.6 -5 23.1 0M-11.3 -44.0q11.3 -5 22.7 0M-10.6 -59.0q10.6 -5 21.1 0M-9.8 -74.0q9.8 -5 19.6 0M-9.0 -89.0q9.0 -5 18.0 0M-8.2 -104.0q8.2 -5 16.4 0" stroke="#1E7A3C" stroke-width="3" fill="none" stroke-linecap="round"/></g></g>
 <path d="M92 232h116l-14 92h-88Z" fill="#FFE24A" stroke="#141414" stroke-width="5" stroke-linejoin="round"/>
 <ellipse cx="150" cy="234" rx="58" ry="10" fill="#A65E4A" stroke="#141414" stroke-width="5"/></svg>
@@ -129,7 +174,7 @@ body{padding-top:calc(66px + env(safe-area-inset-top,0px))}</style>
 <g class="wipe"><rect x="100" y="130" width="70" height="56" rx="6" fill="#fff" stroke="#141414" stroke-width="4" transform="rotate(-12 135 158)"/></g></svg>
 <h2 class="a d2" style="font-size:15cqw">Afstoffen</h2></section>
 <section class="scene" data-dur="6000" style="background:#E3ECFF"><span class="tag a">Water</span>
-<svg class="art" viewBox="0 0 300 140" aria-hidden="true" style="width:60cqw"><g class="flash" style=""><path transform="translate(150 10) scale(4)" d="M0 0c-10 15-10 25 0 25s10-10 0-25Z" fill="#7FC8E8" stroke="#141414" stroke-width="0.62"/></g></svg>
+<svg class="art" viewBox="96 0 108 124" aria-hidden="true"><g class="flash" style=""><path transform="translate(150 10) scale(4)" d="M0 0c-10 15-10 25 0 25s10-10 0-25Z" fill="#7FC8E8" stroke="#141414" stroke-width="0.62"/></g></svg>
 <div class="col" style="color:var(--blue)">
 <h2 class="a d1" style="color:var(--ink)">Zeer weinig</h2>
 <div class="cal a d2" style="grid-template-columns:repeat(4,1fr)"><span class=""><b>W1</b></span><span class=""><b>W2</b></span><span class=""><b>W3</b></span><span class="w"><b>W4</b></span></div>
@@ -181,8 +226,10 @@ body{padding-top:calc(66px + env(safe-area-inset-top,0px))}</style>
     scenes[idx].classList.add('on');
     stage.classList.toggle('dark',scenes[idx].classList.contains('dk'));
     fills.forEach((f,i)=>f.style.width=i<idx?'100%':'0%');
+    document.dispatchEvent(new CustomEvent('reel:scene',{detail:idx}));
   }
   function setPlay(p){playing=p;playBtn.textContent=p?'Pauze':'Speel';stage.querySelectorAll('.scene.on *').forEach(el=>el.style.animationPlayState=p?'running':'paused')}
+  window.__reel={go:i=>{show(i);setPlay(true)}};
   function tick(t){
     const dt=t-last;last=t;
     if(playing&&!ended){
@@ -214,6 +261,35 @@ body{padding-top:calc(66px + env(safe-area-inset-top,0px))}</style>
   document.getElementById('next').addEventListener('click',()=>{show(idx+1);setPlay(true)});
   document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();if(e.key===' '){e.preventDefault();playBtn.click()}});
   show(0);requestAnimationFrame(tick);
+})();
+</script>
+<script id="layout-js">// Gedeelde compositielaag: bouwt op de computer een inhoudstafel naast de reel.
+(function(){
+  const stage=document.getElementById('stage'); if(!stage) return;
+  const ctrl=document.querySelector('.ctrl'), hint=document.querySelector('.hint');
+  const scenes=[...stage.querySelectorAll('.scene')];
+  const col=document.createElement('div'); col.className='reelcol';
+  stage.parentNode.insertBefore(col,stage);
+  [stage,ctrl,hint].forEach(el=>{ if(el) col.appendChild(el); });
+
+  const first=scenes[0];
+  const latin=(first.querySelector('h2')||{}).textContent||document.title;
+  const common=(first.querySelector('.note')||{}).textContent||'';
+  const toc=document.createElement('nav'); toc.className='toc'; toc.setAttribute('aria-label','Hoofdstukken van deze fiche');
+  const items=scenes.map((s,i)=>{
+    const t=(s.querySelector('.tag')||{}).textContent||('Scène '+(i+1));
+    let label=t.charAt(0).toUpperCase()+t.slice(1).toLowerCase();
+    if(i===0&&/plantenfiche/i.test(t)) label='Intro';
+    return `<li><button type="button" data-i="${i}">${label}</button></li>`;
+  }).join('');
+  toc.innerHTML=`<span class="eyebrow">Plantenfiche</span><h1>${latin}</h1>`+
+    (common?`<p class="common">${common}</p>`:'')+`<ol>${items}</ol>`;
+  col.after(toc);
+  const btns=[...toc.querySelectorAll('button')];
+  btns.forEach(b=>b.addEventListener('click',()=>{ if(window.__reel) window.__reel.go(+b.dataset.i); }));
+  function mark(i){ btns.forEach((b,k)=>{ if(k===i) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); }); }
+  document.addEventListener('reel:scene',e=>mark(e.detail));
+  const on=scenes.findIndex(s=>s.classList.contains('on')); mark(on<0?0:on);
 })();
 </script>
 </body>
