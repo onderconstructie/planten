@@ -1,4 +1,4 @@
-# Waar zet ik mijn plant?
+# Snap je plant
 
 Korte geanimeerde plantenfiches, gebaseerd op handgetekende notities.
 

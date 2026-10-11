@@ -214,7 +214,7 @@ def page(slug, title, desc, scenes, extra_css=''):
 <meta name="description" content="{desc}">
 <meta name="theme-color" content="#FFD60A">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Plantplek">
+<meta name="apple-mobile-web-app-title" content="Snap je plant">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
@@ -664,9 +664,9 @@ def build_overview():
     mini_svg = _re.sub(r'<rect class="hit"[^>]*/>', '', mini_svg)
     mini_svg = _re.sub(r'<a class="([^"]*)"[^>]*>', r'<g class="\1">', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
-    core = f'<title>Waar zet ik mijn plant?</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
+    core = f'<title>Snap je plant</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
-            f'<h1>Waar zet ik mijn plant?</h1><p class="hand">klik op een plant voor haar fiche</p>\n'
+            f'<h1>Snap je plant</h1><p class="hand">waar zet ik mijn plant? klik erop</p>\n'
             f'<div class="roomwrap">{room_svg(links)}</div>\n'
             f'<div class="mini" id="mini" aria-hidden="true">{mini_svg}<div class="vp" id="vp"><svg class="hand" viewBox="0 0 40 44" aria-hidden="true"><path d="M17 41c-5-3-9-9-10-13-1-3 2-5 4-3l4 4V8c0-3 5-3 5 0v11c0-3 5-3 5 0v2c0-3 5-3 5 0v2c0-3 5-3 5 0v7c0 5-2 8-5 11Z" fill="#FFFDF6" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg></div></div>\n'
             f'<p class="legend"><span><i></i>een plant op haar plek</span><span><i class="g"></i>doorschijnend: kan hier ook staan</span></p>\n'
@@ -680,7 +680,7 @@ def build_overview():
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
             '<meta name="description" content="Welke plant past waar in je huiskamer? Geanimeerde plantenfiches, getekend in een schriftje.">\n'
             '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n'
-            '<meta name="apple-mobile-web-app-title" content="Plantplek">\n<link rel="manifest" href="manifest.webmanifest">\n'
+            '<meta name="apple-mobile-web-app-title" content="Snap je plant">\n<link rel="manifest" href="manifest.webmanifest">\n'
             '<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
             + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
     print('geschreven', path)
