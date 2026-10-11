@@ -5,6 +5,6 @@
 <path d="M284 274L342 456" stroke="#141414" stroke-width="52"/>
 <path d="M226 330L170 428" stroke="#FFFDF6" stroke-width="9" opacity=".85"/>
 <path d="M300 334L332 432" stroke="#FFFDF6" stroke-width="9" opacity=".85"/>
-<path d="M232 300l26 12-20 10 26 12" fill="none" stroke="#141414" stroke-width="10"/>
+
 <circle cx="266" cy="262" r="20" fill="#FFD60A" stroke="#141414" stroke-width="10"/>
 </g></svg>
