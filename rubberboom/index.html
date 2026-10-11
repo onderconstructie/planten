@@ -116,7 +116,7 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 .scene.on .branch{animation:leaf .6s 2.4s cubic-bezier(.3,1.7,.5,1) forwards}
 .scene.on .branch.b2{animation-delay:2.7s}.scene.on .branch.b3{animation-delay:3s}
 .cuts{display:grid;grid-template-columns:1fr 1fr;gap:3cqw;width:100%}
-.cuts div{border:3px solid var(--leaf);border-radius:16px;padding:3cqw;text-align:center;font:700 6.4cqw/1.05 var(--hand);color:var(--ink);background:var(--paper)}
+.cuts div{border:3px solid var(--leaf);border-radius:16px;padding:2cqw 2cqw 2.5cqw;text-align:center;font:700 6.4cqw/1 var(--hand);color:var(--ink);background:var(--paper);display:flex;flex-direction:column;align-items:center;gap:1cqw}.cuts svg{width:80%;height:auto;overflow:visible}
 .cuts small{display:block;font:800 3.4cqw var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--leaf);margin-bottom:1cqw}
 /* 8 toxic */
 #s8{background:var(--red);color:var(--paper)}
@@ -313,8 +313,21 @@ svg.art{width:86cqw;height:auto;overflow:visible}
     <div style="display:flex;flex-direction:column;gap:4cqw;align-items:center;width:100%">
       <h2 class="a d3" style="font-size:9.4cqw">Snoei de top<br>om uit te struiken</h2>
       <div class="cuts a d5">
-        <div><small>Stek 1</small>bladeren in water</div>
-        <div><small>Stek 2</small>top met bladeren stekken</div>
+        <div><small>Stek 1</small><svg viewBox="0 0 120 112" aria-hidden="true">
+<path d="M35 50H85L81 104H39Z" fill="#7FC8E8" opacity=".75"/>
+<path d="M60 96V30" stroke="#141414" stroke-width="3"/>
+<path d="M60 96l-7 10M60 96v12M60 96l7 10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="47" cy="78" r="2.5" fill="#fff"/><circle cx="73" cy="66" r="2" fill="#fff"/><circle cx="70" cy="88" r="2.5" fill="#fff"/>
+<path d="M32 22L38 104H82L88 22" fill="none" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<use href="#lf" transform="translate(60 42) rotate(-38) scale(.3)"/>
+<use href="#lf" transform="translate(60 34) rotate(32) scale(.28)"/></svg><span>bladeren in water</span></div>
+        <div><small>Stek 2</small><svg viewBox="0 0 120 112" aria-hidden="true">
+<path d="M60 70V22" stroke="#141414" stroke-width="3"/>
+<use href="#lf" transform="translate(60 54) rotate(-48) scale(.3)"/>
+<use href="#lf" transform="translate(60 44) rotate(42) scale(.3)"/>
+<use href="#lf" transform="translate(60 28) rotate(-4) scale(.26)"/>
+<path d="M34 70h52l-6 34H40Z" fill="#B5654A" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<ellipse cx="60" cy="70" rx="26" ry="5" fill="#6B4A34" stroke="#141414" stroke-width="3"/></svg><span>top stekken</span></div>
       </div>
     </div>
   </section>
