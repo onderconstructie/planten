@@ -1,4 +1,4 @@
-# Planten
+# Planten in een minuutje
 
 Korte geanimeerde plantenfiches, gebaseerd op handgetekende notities.
 

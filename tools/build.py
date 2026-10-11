@@ -214,7 +214,7 @@ def page(slug, title, desc, scenes, extra_css=''):
 <meta name="description" content="{desc}">
 <meta name="theme-color" content="#FFD60A">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Planten">
+<meta name="apple-mobile-web-app-title" content="Minuutje">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
@@ -336,7 +336,7 @@ def build_pilea():
       dict(dur=6500, bg=INK, dark=True, html=f'''{recap([('Blad','afstoffen','var(--leaf-lt)'),('Water','1x/week, kleine beetjes','#8FD3D5'),('Grond','licht vochtig, beter te droog','#E8C9A0'),('Licht','indirect, maar wel veel','var(--sun)'),('Stekken',"baby'tjes lossnijden",'#CDB4F5'),('Bijnaam','pannenkoekenplant','#F59AA5')])}
 <p class="note a d6" style="color:var(--desk);font-size:9cqw">Pilea peperomioides</p>'''),
     ]
-    page('pannenkoekenplant', 'Pannenkoekenplant in een minuut',
+    page('pannenkoekenplant', 'Pannenkoekenplant in een minuutje',
          'Geanimeerde explainer over de pannenkoekenplant (Pilea peperomioides), gemaakt op basis van een handgetekende plantenfiche.', scenes)
 
 # ---------- SANSEVIERIA ----------
@@ -397,7 +397,7 @@ def build_sans():
       dict(dur=6500, bg=INK, dark=True, html=f'''{recap([('Blad','afstoffen','var(--leaf-lt)'),('Water','zeer weinig, 1x per 4 weken','#AFC7F5'),('Licht','weinig tot veel indirect','var(--sun)'),('Vermeerderen','scheuren of bladstek','#CDB4F5'),('Lucht','benzeen, formaldehyde','#F59AA5'),('Aantal','6 à 8, goed verspreid','#FFE24A')])}
 <p class="note a d6" style="color:var(--desk);font-size:9cqw">Sansevieria · vrouwentong</p>'''),
     ]
-    page('vrouwentong', 'Vrouwentong in een minuut',
+    page('vrouwentong', 'Vrouwentong in een minuutje',
          'Geanimeerde explainer over de vrouwentong (Sansevieria), gemaakt op basis van een handgetekende plantenfiche.', scenes)
 
 # ---------- CHLOROPHYTUM ----------
@@ -448,7 +448,7 @@ def build_chloro():
       dict(dur=6200, bg=INK, dark=True, html=f'''{recap([('Water','ruim, dan laten uitdrogen','#AFC7F5'),('Verstuiver','blad besproeien','#8FD3D5'),('Licht','indirect, veel of weinig','var(--sun)'),('Stekken','via de uitlopers','var(--leaf-lt)'),('Lucht','formaldehyde','#F59AA5'),('Aantal','4 à 6 planten','#FFE24A')])}
 <p class="note a d6" style="color:var(--desk);font-size:9cqw">graslelie · spinnenplant</p>'''),
     ]
-    page('graslelie', 'Graslelie in een minuut',
+    page('graslelie', 'Graslelie in een minuutje',
          'Geanimeerde explainer over de graslelie of spinnenplant (Chlorophytum comosum), gemaakt op basis van een handgetekende plantenfiche.', scenes)
 
 build_pilea(); build_sans(); build_chloro()
@@ -664,9 +664,9 @@ def build_overview():
     mini_svg = _re.sub(r'<rect class="hit"[^>]*/>', '', mini_svg)
     mini_svg = _re.sub(r'<a class="([^"]*)"[^>]*>', r'<g class="\1">', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
-    core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
+    core = f'<title>Planten in een minuutje</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
-            f'<h1>Plantenfiches</h1><p class="hand">welke plant past waar? tik op een plant</p>\n'
+            f'<h1>Planten in een minuutje</h1><p class="hand">welke plant past waar? tik op een plant</p>\n'
             f'<div class="roomwrap">{room_svg(links)}</div>\n'
             f'<div class="mini" id="mini" aria-hidden="true">{mini_svg}<div class="vp" id="vp"><svg class="hand" viewBox="0 0 40 44" aria-hidden="true"><path d="M17 41c-5-3-9-9-10-13-1-3 2-5 4-3l4 4V8c0-3 5-3 5 0v11c0-3 5-3 5 0v2c0-3 5-3 5 0v2c0-3 5-3 5 0v7c0 5-2 8-5 11Z" fill="#FFFDF6" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg></div></div>\n'
             f'<p class="legend"><span><i></i>tik op een plant voor haar fiche</span><span><i class="g"></i>doorschijnend: kan hier ook staan</span></p>\n'
@@ -680,7 +680,7 @@ def build_overview():
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
             '<meta name="description" content="Welke plant past waar in je huiskamer? Geanimeerde plantenfiches, getekend in een schriftje.">\n'
             '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n'
-            '<meta name="apple-mobile-web-app-title" content="Planten">\n<link rel="manifest" href="manifest.webmanifest">\n'
+            '<meta name="apple-mobile-web-app-title" content="Minuutje">\n<link rel="manifest" href="manifest.webmanifest">\n'
             '<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
             + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
     print('geschreven', path)
