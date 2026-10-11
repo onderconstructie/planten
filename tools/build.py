@@ -412,3 +412,111 @@ def build_chloro():
          'Geanimeerde explainer over de graslelie of spinnenplant (Chlorophytum comosum), gemaakt op basis van een handgetekende plantenfiche.', scenes)
 
 build_pilea(); build_sans(); build_chloro()
+# ---------- OVERZICHT ----------
+
+FI_LEAF = f'<g id="fl"><path d="M0 0C-38-18-40-70 0-100C40-70 38-18 0 0Z" fill="#8ED19B" stroke="{INK}" stroke-width="4"/><path d="M0-4V-92" stroke="#2E9E4F" stroke-width="3.5"/></g>'
+
+def ficus_plant():
+    ls = [(250,-62,.9),(240,58,.9),(190,-55,.85),(160,52,.85),(115,-40,.75),(95,35,.7),(50,-6,.55)]
+    leaves = ''.join(f'<use href="#fl" transform="translate(150 {y}) rotate({r}) scale({sc})"/>' for y,r,sc in ls)
+    return (f'<ellipse cx="150" cy="318" rx="80" ry="10" fill="{INK}" opacity=".3"/><path d="M150 300V40" stroke="{INK}" stroke-width="5"/>{leaves}'
+            f'<path d="M95 240h110l-14 70H109Z" fill="#FFE24A" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>'
+            f'<path d="M88 232h124v14H88Z" fill="#FFE24A" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>')
+
+# Elke nieuwe plant: een regel hier. Feiten alleen van de fiche.
+PLANTS = [
+  dict(slug='rubberboom', name='Rubberboom', sci='Ficus elastica', tint='#BFE6C6', art=ficus_plant, vb='30 -10 240 345',
+       facts=['1x / week water', 'indirect licht', 'luchtfilter: 1 à 3'], lucht=True, toxic=True),
+  dict(slug='pannenkoekenplant', name='Pannenkoekenplant', sci='Pilea peperomioides', tint='#CFEFF0', art=lambda: pilea_plant(), vb='10 15 280 320',
+       facts=['1x / week water', 'veel indirect licht', "stekken via baby'tjes"], lucht=False, toxic=False),
+  dict(slug='vrouwentong', name='Vrouwentong', sci='Sansevieria', tint='#FFF1A8', art=sans_plant, vb='40 -20 220 360',
+       facts=['1x / 4 weken water', 'weinig tot veel licht', 'luchtfilter: 6 à 8'], lucht=True, toxic=False),
+  dict(slug='graslelie', name='Graslelie', sci='Chlorophytum comosum', tint='#DCE6FF', art=lambda: chloro_plant(), vb='20 20 280 310',
+       facts=['ruim water, laat uitdrogen', 'indirect licht', 'luchtfilter: 4 à 6'], lucht=True, toxic=False),
+]
+
+OV_CSS = r"""
+:root{--desk:#FFD60A;--ink:#141414;--paper:#FFFDF6;--leaf:#2E9E4F;--red:#D8263A;--purple:#5B2A9E;
+--display:"Bricolage Grotesque",system-ui,sans-serif;--hand:"Caveat","Comic Sans MS",cursive;color-scheme:light}
+body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:24px 56px}
+.back{display:inline-block;font:700 14px var(--display);color:var(--ink);text-decoration:none;border:2px solid var(--ink);background:var(--paper);border-radius:99px;padding:4px 12px;margin-bottom:18px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:22px}
+h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
+.hand{font:700 clamp(24px,5vw,34px)/1 var(--hand);margin:8px 0 0}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tools input{font:600 16px var(--display);color:var(--ink);border:3px solid var(--ink);border-radius:99px;padding:9px 16px;background:var(--paper);box-shadow:3px 3px 0 var(--ink);min-width:0;width:220px;max-width:100%}
+.tools input::placeholder{color:#6b6b5e}
+.chipbtn{font:800 14px var(--display);border:3px solid var(--ink);border-radius:99px;padding:9px 14px;background:var(--paper);color:var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+.chipbtn[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
+input:focus-visible,.chipbtn:focus-visible,.card:focus-visible,.back:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+.sr{position:absolute;left:-9999px}
+.count{font:700 24px var(--hand);margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:28px 22px}
+.card{display:flex;flex-direction:column;text-decoration:none;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);overflow:hidden;transform:rotate(var(--r,0deg));transition:transform .2s,box-shadow .2s}
+.card:hover{transform:rotate(0) translate(-2px,-4px);box-shadow:9px 10px 0 var(--ink)}
+.card:nth-child(4n+1){--r:-1.2deg}.card:nth-child(4n+2){--r:.8deg}.card:nth-child(4n+3){--r:-.6deg}.card:nth-child(4n){--r:1.1deg}
+.pic{aspect-ratio:4/3.4;display:grid;place-items:center;border-bottom:3px solid var(--ink);padding:12px;position:relative;box-sizing:border-box;max-width:100%}
+.pic{overflow:hidden}.pic svg{position:absolute;top:12px;left:12px;width:calc(100% - 24px);height:calc(100% - 24px)}
+.badge{position:absolute;top:10px;right:10px;font:800 11px var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:var(--paper);border-radius:99px;padding:4px 9px}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.sci{font:700 22px/1 var(--hand);color:var(--leaf)}
+.name{font:800 26px/1 var(--display);letter-spacing:-.02em;margin:0}
+.facts{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.facts li{font:600 13px/1.2 var(--display);border:2px solid var(--ink);border-radius:9px;padding:3px 8px}
+.play{margin-top:auto;padding-top:8px;font:800 15px var(--display);display:flex;align-items:center;gap:8px}
+.play i{width:30px;height:30px;border-radius:50%;background:var(--ink);display:grid;place-items:center;font-style:normal;color:var(--desk);font-size:12px}
+.empty{font:700 28px var(--hand);text-align:center;padding:40px 0}
+.foot{margin-top:44px;font:600 14px/1.5 var(--display);max-width:62ch}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+"""
+
+OV_JS = r"""
+(function(){
+ const q=document.getElementById('q'),f=document.getElementById('lucht'),cards=[...document.querySelectorAll('.card')],cnt=document.getElementById('count'),empty=document.getElementById('empty');
+ function run(){const t=q.value.trim().toLowerCase(),only=f.getAttribute('aria-pressed')==='true';let n=0;
+  cards.forEach(c=>{const ok=(!t||c.dataset.s.includes(t))&&(!only||c.dataset.lucht==='1');c.hidden=!ok;if(ok)n++});
+  cnt.textContent=n===1?'1 plant':n+' planten';empty.hidden=n>0;}
+ q.addEventListener('input',run);
+ f.addEventListener('click',()=>{f.setAttribute('aria-pressed',f.getAttribute('aria-pressed')==='true'?'false':'true');run()});
+ run();
+})();
+"""
+
+ARTIFACT_LINKS = {'rubberboom':'https://claude.ai/artifact/Pe65DNa14PMjNJazRRsmVY','pannenkoekenplant':'https://claude.ai/artifact/Q1NQFtvBS527ePdVp2beuH','vrouwentong':'https://claude.ai/artifact/G4852WAcyFnP8FvMYAvd7M','graslelie':'https://claude.ai/artifact/5iLZijme21bXEyhVhve6cn'}
+
+def build_overview():
+    links = ARTIFACT_LINKS if ARTIFACT else {}
+    cards = ''
+    for pl in PLANTS:
+        href = links.get(pl['slug'], pl['slug'] + '/')
+        facts = ''.join(f'<li>{x}</li>' for x in pl['facts'])
+        badge = '<span class="badge">giftig sap</span>' if pl['toxic'] else ''
+        search = (pl['name'] + ' ' + pl['sci'] + ' ' + ' '.join(pl['facts'])).lower()
+        cards += (f'<a class="card" href="{href}" data-s="{search}" data-lucht="{1 if pl["lucht"] else 0}">\n'
+                  f'<div class="pic" style="background:{pl["tint"]}">{badge}<svg viewBox="{pl["vb"]}" aria-hidden="true">{pl["art"]()}</svg></div>\n'
+                  f'<div class="body"><span class="sci">{pl["sci"]}</span><h2 class="name">{pl["name"]}</h2><ul class="facts">{facts}</ul>'
+                  f'<span class="play"><i>&#9654;</i> Bekijk de reel</span></div></a>\n')
+    defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
+    core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
+    main = (f'{defs}<div class="wrap">\n'
+            f'<a class="back" href="https://onderconstructie.github.io/">&larr; Onder Constructie</a>\n'
+            f'<header class="top"><div><h1>Plantenfiches</h1><p class="hand">getekend in een schriftje, tot leven gebracht</p></div>\n'
+            f'<div class="tools"><label for="q" class="sr">Zoek een plant</label><input id="q" type="search" placeholder="Zoek een plant" autocomplete="off">\n'
+            f'<button class="chipbtn" id="lucht" type="button" aria-pressed="false">Luchtfilter</button></div></header>\n'
+            f'<p class="count" id="count" aria-live="polite"></p>\n'
+            f'<div class="grid">{cards}</div>\n'
+            f'<p class="empty" id="empty" hidden>Geen plant gevonden.</p>\n'
+            f'<p class="foot">Elke reel volgt alleen wat op de handgetekende fiche staat.</p>\n'
+            f'</div>\n<script>{OV_JS}</script>\n')
+    if ARTIFACT:
+        path = os.path.join(OUT, 'overzicht.html'); open(path, 'w').write(core + main)
+    else:
+        path = os.path.join(OUT, 'index.html')
+        open(path, 'w').write('<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
+            '<meta name="description" content="Geanimeerde plantenfiches van Onder Constructie.">\n'
+            + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
+    print('geschreven', path)
+
+build_overview()
