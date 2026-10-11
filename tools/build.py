@@ -554,8 +554,14 @@ h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;marg
 .roomwrap{border:3px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);overflow-x:auto;overflow-y:hidden;background:#FFF8E1;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 svg.room{display:block;height:clamp(380px,68vh,600px);width:auto;max-width:none}
 @media (min-width:900px){svg.room{width:100%;height:auto}}
-.swipe{font:700 24px var(--hand);margin:10px 0 0;text-align:center}
-@media (min-width:900px){.swipe{display:none}}
+.mini{position:relative;width:max-content;margin:14px auto 4px;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#FFF8E1;cursor:pointer;touch-action:none}
+.mini .minisvg{display:block;height:72px;width:auto}
+.mini .minisvg .gust{animation:none;stroke-dashoffset:0}
+.mini .vp{position:absolute;top:0;bottom:0;left:0;border:3px solid var(--ink);border-radius:6px;background:rgba(255,214,10,.28);box-sizing:border-box}
+.mini .hand{position:absolute;width:30px;height:33px;left:50%;bottom:-6px;margin-left:-15px;animation:nudge 1.4s ease-in-out infinite}
+.mini.moved .hand{opacity:0;transition:opacity .4s;animation:none}
+@keyframes nudge{0%,100%{transform:translateX(-12px) rotate(-8deg)}50%{transform:translateX(12px) rotate(8deg)}}
+.mini.off{display:none}
 svg.room .lbl{font:700 34px var(--hand)}
 svg.room .gust{stroke-dasharray:120;stroke-dashoffset:120;animation:gust 1.6s ease-out infinite}
 svg.room .gust:nth-of-type(2){animation-delay:.5s}svg.room .gust:nth-of-type(3){animation-delay:1s}
@@ -593,14 +599,27 @@ h2.all{font:800 clamp(28px,6vw,44px)/1 var(--display);letter-spacing:-.03em;marg
 .foot{margin-top:40px;font:700 22px/1.2 var(--hand);max-width:52ch}
 @media (max-width:520px){.mosaic{grid-auto-rows:215px}}
 @media (max-width:360px){.mosaic{grid-template-columns:1fr}.tile.big,.tile.wide{grid-column:span 1}}
-@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}svg.room .gust{animation:none;stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}svg.room .gust{animation:none;stroke-dashoffset:0}.mini .hand{animation:none}}
 """
 
 OV_JS = r"""
 (function(){
  // start de kamer op gsm bij het raam, zodat je meteen planten ziet
- const w=document.querySelector('.roomwrap');
+ const w=document.querySelector('.roomwrap'),mini=document.getElementById('mini'),vp=document.getElementById('vp');
+ let start=0;
+ function sync(){
+  const over=w.scrollWidth>w.clientWidth+2;mini.classList.toggle('off',!over);if(!over)return;
+  const mw=mini.clientWidth;vp.style.width=(w.clientWidth/w.scrollWidth*mw)+'px';vp.style.left=(w.scrollLeft/w.scrollWidth*mw)+'px';
+ }
  try{ if(w.scrollWidth>w.clientWidth) w.scrollLeft=(w.scrollWidth-w.clientWidth)*0.28; }catch(e){}
+ start=w.scrollLeft;sync();
+ w.addEventListener('scroll',()=>{sync();if(Math.abs(w.scrollLeft-start)>20)mini.classList.add('moved')},{passive:true});
+ window.addEventListener('resize',sync);
+ function jump(e){const r=mini.getBoundingClientRect();const f=(e.clientX-r.left)/r.width;w.scrollLeft=f*w.scrollWidth-w.clientWidth/2;mini.classList.add('moved')}
+ let drag=false;
+ mini.addEventListener('pointerdown',e=>{drag=true;mini.setPointerCapture(e.pointerId);jump(e)});
+ mini.addEventListener('pointermove',e=>{if(drag)jump(e)});
+ mini.addEventListener('pointerup',()=>{drag=false});
 })();
 """
 
@@ -624,13 +643,17 @@ def build_overview():
                   f'<svg class="plant" viewBox="{pl["vb"]}" aria-hidden="true">{pl["art"]()}</svg>\n'
                   f'<span class="label"><span class="sci">{pl["sci"]}</span><span class="name">{pl["name"]}</span><ul class="needs">{needs}</ul></span></a>\n')
     tiles += '<div class="soon">nog meer planten<br>in het schriftje…</div>\n'
+    import re as _re
+    mini_svg = room_svg(links)
+    mini_svg = _re.sub(r'<title>.*?</title>', '', mini_svg)
+    mini_svg = _re.sub(r'<a [^>]*>', '<g>', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
     core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
             f'<h1>Plantenfiches</h1><p class="hand">welke plant past waar? tik op een plant</p>\n'
             f'<div class="roomwrap">{room_svg(links)}</div>\n'
+            f'<div class="mini" id="mini" aria-hidden="true">{mini_svg}<div class="vp" id="vp"><svg class="hand" viewBox="0 0 40 44" aria-hidden="true"><path d="M17 41c-5-3-9-9-10-13-1-3 2-5 4-3l4 4V8c0-3 5-3 5 0v11c0-3 5-3 5 0v2c0-3 5-3 5 0v2c0-3 5-3 5 0v7c0 5-2 8-5 11Z" fill="#FFFDF6" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg></div></div>\n'
             f'<p class="legend"><span><i></i>tik op een plant voor haar fiche</span><span><i class="g"></i>doorschijnend: kan hier ook staan</span></p>\n'
-            f'<p class="swipe">veeg ← → door de kamer</p>\n'
             f'<h2 class="all">Alle fiches</h2>\n'
             f'<div class="mosaic">{tiles}</div>\n'
             f'<p class="foot">Elke plant staat waar haar handgetekende fiche het toelaat, en elke reel volgt alleen wat op die fiche staat.</p>\n'
