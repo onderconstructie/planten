@@ -104,12 +104,14 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 /* 7 prune */
 #s7{background:#E6F6E3}
 #s7 h2{color:var(--leaf)}
-.snip{transform-box:fill-box;transform-origin:50% 60%}
-.scene.on .snip{animation:snip .25s .6s 4 alternate}
-@keyframes snip{to{transform:rotate(-14deg)}}
+.shears .ha,.shears .hb{transform-box:view-box;transform-origin:0 0}
+.scene.on .shears .ha{animation:bladeA .28s .5s 5 alternate ease-in-out}
+.scene.on .shears .hb{animation:bladeB .28s .5s 5 alternate ease-in-out}
+@keyframes bladeA{from{transform:rotate(-6deg)}to{transform:rotate(17deg)}}
+@keyframes bladeB{from{transform:rotate(6deg)}to{transform:rotate(-17deg)}}
 .top{transform-box:fill-box}
 .scene.on .top{animation:lift 1s 1.7s forwards}
-@keyframes lift{to{transform:translate(70px,-30px) rotate(25deg)}}
+@keyframes lift{70%{opacity:1}to{transform:translate(60px,-70px) rotate(35deg);opacity:0}}
 .branch{transform-box:fill-box;transform-origin:50% 100%;transform:scale(0)}
 .scene.on .branch{animation:leaf .6s 2.4s cubic-bezier(.3,1.7,.5,1) forwards}
 .scene.on .branch.b2{animation-delay:2.7s}.scene.on .branch.b3{animation-delay:3s}
@@ -294,11 +296,20 @@ svg.art{width:86cqw;height:auto;overflow:visible}
         <path d="M-30-22h60l-8 30h-44Z" fill="#FFE24A" stroke="#141414" stroke-width="5"/>
       </g>
       <g class="top"><path d="M110 85V48" stroke="#141414" stroke-width="5"/><use href="#lf" transform="translate(110 60) rotate(-40) scale(.45)"/><use href="#lf" transform="translate(110 50) rotate(20) scale(.4)"/></g>
-      <g class="snip"><g transform="translate(150 92)">
-        <path d="M0 0l60-14c10-2 14 10 4 14L0 0Z" fill="#141414"/>
-        <path d="M0 0l60 14c10 2 14-10 4-14L0 0Z" fill="#141414"/>
-        <circle cx="0" cy="0" r="6" fill="#FFFDF6" stroke="#141414" stroke-width="3"/>
-      </g></g>
+      <g class="shears" transform="translate(166 84) rotate(-90) scale(.3)">
+        <g class="ha"><g transform="translate(-266 -262)">
+          <path d="M246 262C204 204 176 140 204 70C246 118 270 190 276 254Z" fill="#141414"/>
+          <path d="M284 274L342 456" stroke="#141414" stroke-width="52" stroke-linecap="round"/>
+          <path d="M300 334L332 432" stroke="#FFFDF6" stroke-width="9" stroke-linecap="round" opacity=".85"/>
+        </g></g>
+        <g class="hb"><g transform="translate(-266 -262)">
+          <path d="M266 258C282 186 306 124 352 92C364 146 334 214 296 268Z" fill="#141414"/>
+          <path d="M248 272L150 448" stroke="#141414" stroke-width="52" stroke-linecap="round"/>
+          <path d="M226 330L170 428" stroke="#FFFDF6" stroke-width="9" stroke-linecap="round" opacity=".85"/>
+        </g></g>
+        <path d="M-34 38l26 12-20 10 26 12" fill="none" stroke="#141414" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle r="20" fill="#FFD60A" stroke="#141414" stroke-width="10"/>
+      </g>
     </svg>
     <div style="display:flex;flex-direction:column;gap:4cqw;align-items:center;width:100%">
       <h2 class="a d3" style="font-size:9.4cqw">Snoei de top<br>om uit te struiken</h2>
