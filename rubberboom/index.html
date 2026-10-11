@@ -19,7 +19,7 @@
 }
 html,body{height:100%}
 body{background:var(--desk);color:var(--ink);font-family:var(--display);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-inline:16px;padding-block:12px;box-sizing:border-box}
-.stage{position:relative;width:min(100%,calc((100dvh - 150px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
+.stage{position:relative;width:min(100%,calc((100dvh - 174px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
 .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7cqw 6cqw 8cqw;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity .35s}
 .scene.on{opacity:1;visibility:visible}
 .tag{font:800 3.6cqw/1 var(--display);letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:1.6cqw 3cqw;border-radius:99px;align-self:flex-start}
@@ -141,14 +141,14 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 .ctrl button:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
 #play{min-width:96px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}.scene .a{opacity:1}.branch{transform:none}}
-</style>
+.stage{touch-action:none;user-select:none;-webkit-user-select:none}.hint{font:600 13px/1.3 var(--display);margin:0;text-align:center;opacity:.75}</style>
 </head>
 <body>
 <a class="home" href="../" aria-label="Terug naar Planten">&larr; Planten</a>
 <style>.home{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:12px;font:700 14px var(--display);color:var(--ink);text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:4px 12px;z-index:10}.home:focus-visible{outline:3px solid var(--purple)}body{padding-top:52px}</style>
 
 
-<div class="stage" id="stage" aria-live="polite">
+<div class="stage" id="stage" aria-live="polite" data-nav="{&quot;prev&quot;: &quot;../graslelie/&quot;, &quot;next&quot;: &quot;../pannenkoekenplant/&quot;}">
   <div class="bars" id="bars"></div>
 
   <!-- 1 -->
@@ -364,6 +364,7 @@ svg.art{width:86cqw;height:auto;overflow:visible}
   <button id="play" type="button">Pauze</button>
   <button id="next" type="button" aria-label="Volgende scène">▶</button>
 </div>
+<p class="hint">Veeg ← → door de fiche · ↑ ↓ naar een andere plant</p>
 
 <script>
 (function(){
@@ -393,7 +394,23 @@ svg.art{width:86cqw;height:auto;overflow:visible}
   }
   function setPlay(p){playing=p;playBtn.textContent=p?'Pauze':'Speel';stage.querySelectorAll('.scene.on *').forEach(el=>el.style.animationPlayState=p?'running':'paused')}
   playBtn.addEventListener('click',()=>{ if(playBtn.textContent==='Opnieuw'){show(0);setPlay(true);} else setPlay(!playing); });
-  stage.addEventListener('click',()=>playBtn.click());
+  let swiped=false;
+  stage.addEventListener('click',()=>{if(swiped){swiped=false;return;}playBtn.click();});
+  const nav=JSON.parse(stage.dataset.nav||'{}');
+  let sx=0,sy=0,down=false;
+  stage.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;down=true});
+  stage.addEventListener('pointercancel',()=>{down=false});
+  stage.addEventListener('pointerup',e=>{
+    if(!down)return;down=false;
+    const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(Math.max(Math.abs(dx),Math.abs(dy))<40)return;
+    swiped=true;
+    if(Math.abs(dx)>Math.abs(dy)){
+      if(dx<0){ if(idx===scenes.length-1&&nav.next){location.href=nav.next;return;} show(idx+1);setPlay(true); }
+      else { show(idx-1);setPlay(true); }
+    } else { const u=dy<0?nav.next:nav.prev; if(u) location.href=u; }
+  });
+
   document.getElementById('prev').addEventListener('click',()=>{show(idx-1);setPlay(true)});
   document.getElementById('next').addEventListener('click',()=>{show(idx+1);setPlay(true)});
   document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();if(e.key===' '){e.preventDefault();playBtn.click()}});

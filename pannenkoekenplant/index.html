@@ -17,7 +17,7 @@
 }
 html,body{height:100%}
 body{background:var(--desk);color:var(--ink);font-family:var(--display);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-inline:16px;padding-block:12px;box-sizing:border-box;margin:0}
-.stage{position:relative;width:min(100%,calc((100dvh - 150px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
+.stage{position:relative;width:min(100%,calc((100dvh - 174px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
 .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7cqw 6cqw 8cqw;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity .35s;color:var(--ink)}
 .scene.on{opacity:1;visibility:visible}
 .scene.dk{color:var(--paper)}
@@ -104,12 +104,14 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 #play{min-width:96px}
 .home{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:12px;font:700 14px var(--display);color:var(--ink);text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:4px 12px;z-index:10}
 .home:focus-visible{outline:3px solid var(--purple)}
+.stage{touch-action:none;user-select:none;-webkit-user-select:none}
+.hint{font:600 13px/1.3 var(--display);margin:0;text-align:center;opacity:.75}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}.scene .a,.shine{opacity:1}*{animation-delay:0s!important}}
 body{padding-top:52px}</style>
 </head>
 <body>
 <a class="home" href="../" aria-label="Terug naar Planten">&larr; Planten</a>
-<div class="stage" id="stage" aria-live="polite">
+<div class="stage" id="stage" aria-live="polite" data-nav="{&quot;prev&quot;: &quot;../rubberboom/&quot;, &quot;next&quot;: &quot;../vrouwentong/&quot;}">
 <div class="bars" id="bars"></div>
 <section class="scene dk" data-dur="5200" style="background:#1E7A3C"><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="pl"><circle r="24" fill="#5DBB72" stroke="#1E7A3C" stroke-width="3.5"/><path d="M0 0V-19M0 0l17-9M0 0l13 14M0 0l-13 14M0 0l-17-9" stroke="#1E7A3C" stroke-width="2.2" stroke-linecap="round"/><circle r="3" fill="#1E7A3C"/></g></defs></svg><span class="tag a">Plantenfiche</span>
 <svg class="art" viewBox="0 0 300 335" aria-hidden="true" style="width:80cqw"><ellipse cx="170" cy="324" rx="80" ry="9" fill="#141414" opacity=".3"/><path d="M110 282h80v8h-80Z" fill="#B5654A" stroke="#141414" stroke-width="4"/><path d="M116 290l-4 30M184 290l4 30M150 290v26" stroke="#141414" stroke-width="10" stroke-linecap="round"/><path d="M116 290l-4 30M184 290l4 30M150 290v26" stroke="#B5654A" stroke-width="5" stroke-linecap="round"/><g class="grow" style="animation-delay:0.15s"><path d="M150 228Q102 220 55 150" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(55 150) scale(0.9)"/></g><g class="grow" style="animation-delay:0.27s"><path d="M150 228Q122 155 95 85" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(95 85) scale(1)"/></g><g class="grow" style="animation-delay:0.39s"><path d="M150 228Q150 118 150 48" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(150 48) scale(1.1)"/></g><g class="grow" style="animation-delay:0.51s"><path d="M150 228Q180 162 210 92" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(210 92) scale(1)"/></g><g class="grow" style="animation-delay:0.63s"><path d="M150 228Q199 220 248 150" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(248 150) scale(0.9)"/></g><g class="grow" style="animation-delay:0.75s"><path d="M150 228Q130 220 110 150" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(110 150) scale(0.85)"/></g><g class="grow" style="animation-delay:0.87s"><path d="M150 228Q170 220 190 150" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(190 150) scale(0.85)"/></g><g class="grow" style="animation-delay:0.99s"><path d="M150 228Q150 260 150 190" stroke="#1E7A3C" stroke-width="5" fill="none"/><use href="#pl" transform="translate(150 190) scale(0.8)"/></g><path d="M108 222h84l-8 60h-68Z" fill="#FFE24A" stroke="#141414" stroke-width="5" stroke-linejoin="round"/><path d="M102 214h96v12h-96Z" fill="#FFE24A" stroke="#141414" stroke-width="5" stroke-linejoin="round"/></svg>
@@ -156,6 +158,7 @@ body{padding-top:52px}</style>
 <button id="play" type="button">Pauze</button>
 <button id="next" type="button" aria-label="Volgende scène">▶</button>
 </div>
+<p class="hint">Veeg ← → door de fiche · ↑ ↓ naar een andere plant</p>
 <script>
 (function(){
   const stage=document.getElementById('stage');
@@ -184,7 +187,23 @@ body{padding-top:52px}</style>
     requestAnimationFrame(tick);
   }
   playBtn.addEventListener('click',()=>{ if(ended){show(0);setPlay(true);} else setPlay(!playing); });
-  stage.addEventListener('click',()=>playBtn.click());
+  let swiped=false;
+  stage.addEventListener('click',()=>{if(swiped){swiped=false;return;}playBtn.click();});
+  const nav=JSON.parse(stage.dataset.nav||'{}');
+  let sx=0,sy=0,down=false;
+  stage.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;down=true});
+  stage.addEventListener('pointercancel',()=>{down=false});
+  stage.addEventListener('pointerup',e=>{
+    if(!down)return;down=false;
+    const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(Math.max(Math.abs(dx),Math.abs(dy))<40)return;
+    swiped=true;
+    if(Math.abs(dx)>Math.abs(dy)){
+      if(dx<0){ if(idx===scenes.length-1&&nav.next){location.href=nav.next;return;} show(idx+1);setPlay(true); }
+      else { show(idx-1);setPlay(true); }
+    } else { const u=dy<0?nav.next:nav.prev; if(u) location.href=u; }
+  });
+
   document.getElementById('prev').addEventListener('click',()=>{show(idx-1);setPlay(true)});
   document.getElementById('next').addEventListener('click',()=>{show(idx+1);setPlay(true)});
   document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();if(e.key===' '){e.preventDefault();playBtn.click()}});
