@@ -206,6 +206,12 @@ def page(slug, title, desc, scenes, extra_css=''):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="{desc}">
+<meta name="theme-color" content="#FFD60A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Planten">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 {core}</head>
 <body>
 <a class="home" href="../" aria-label="Terug naar Planten">&larr; Planten</a>
@@ -549,6 +555,7 @@ def build_overview():
         open(path, 'w').write('<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
             '<meta name="description" content="Geanimeerde plantenfiches, getekend in een schriftje en tot leven gebracht.">\n'
+            + '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Planten">\n<link rel="manifest" href="manifest.webmanifest">\n<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
             + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
     print('geschreven', path)
 
