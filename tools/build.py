@@ -439,7 +439,7 @@ OV_CSS = r"""
 :root{--desk:#FFD60A;--ink:#141414;--paper:#FFFDF6;--leaf:#2E9E4F;--red:#D8263A;--purple:#5B2A9E;
 --display:"Bricolage Grotesque",system-ui,sans-serif;--hand:"Caveat","Comic Sans MS",cursive;color-scheme:light}
 body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)}
-.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:24px 56px}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:36px 56px}
 .back{display:inline-block;font:700 14px var(--display);color:var(--ink);text-decoration:none;border:2px solid var(--ink);background:var(--paper);border-radius:99px;padding:4px 12px;margin-bottom:18px}
 .top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:22px}
 h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
@@ -500,7 +500,6 @@ def build_overview():
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
     core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
-            f'<a class="back" href="https://onderconstructie.github.io/">&larr; Onder Constructie</a>\n'
             f'<header class="top"><div><h1>Plantenfiches</h1><p class="hand">getekend in een schriftje, tot leven gebracht</p></div>\n'
             f'<div class="tools"><label for="q" class="sr">Zoek een plant</label><input id="q" type="search" placeholder="Zoek een plant" autocomplete="off">\n'
             f'<button class="chipbtn" id="lucht" type="button" aria-pressed="false">Luchtfilter</button></div></header>\n'
@@ -515,7 +514,7 @@ def build_overview():
         path = os.path.join(OUT, 'index.html')
         open(path, 'w').write('<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
-            '<meta name="description" content="Geanimeerde plantenfiches van Onder Constructie.">\n'
+            '<meta name="description" content="Geanimeerde plantenfiches, getekend in een schriftje en tot leven gebracht.">\n'
             + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
     print('geschreven', path)
 
