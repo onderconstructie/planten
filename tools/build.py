@@ -463,16 +463,16 @@ def ficus_plant():
 PLANTS = [
   dict(slug='rubberboom', name='Rubberboom', sci='Ficus elastica', tint='#BFE6C6', art=ficus_plant, vb='30 -10 240 345',
        licht_txt='indirect', water_txt='1x / week', lucht=True, toxic=True,
-       spot=(705, 640, .78), tag=(640, 262), tagtxt='indirect, uit de tocht'),
+       spot=(705, 640, .78), tagtxt='indirect, uit de tocht', ghosts=[]),
   dict(slug='pannenkoekenplant', name='Pannenkoeken­plant', sci='Pilea peperomioides', tint='#CFEFF0', art=lambda: pilea_plant(), vb='10 15 280 320',
        licht_txt='indirect, veel', water_txt='1x / week', lucht=False, toxic=False,
-       spot=(530, 404, .42), tag=(292, 6), tagtxt='indirect, maar wel veel'),
+       spot=(530, 404, .42), tagtxt='indirect, maar wel veel', ghosts=[]),
   dict(slug='vrouwentong', name='Vrouwentong', sci='Sansevieria', tint='#FFF1A8', art=sans_plant, vb='40 -20 220 360',
        licht_txt='weinig tot veel', water_txt='1x / 4 weken', lucht=True, toxic=False,
-       spot=(1128, 650, .62), tag=(958, 312), tagtxt='weinig licht? oké'),
+       spot=(1128, 650, .62), tagtxt='weinig tot veel licht', ghosts=[(478, 652, .5, False)]),
   dict(slug='graslelie', name='Graslelie', sci='Chlorophytum comosum', tint='#DCE6FF', art=lambda: chloro_plant(), vb='20 20 280 310',
        licht_txt='veel of weinig', water_txt='ruim', lucht=True, toxic=False,
-       spot=(955, 262, .5), tag=(640, 126), tagtxt='veel of weinig licht', hang=True),
+       spot=(955, 262, .5), tagtxt='veel of weinig licht', hang=True, ghosts=[(1122, 236, .4, True)]),
 ]
 
 ICON = {
@@ -517,30 +517,30 @@ def room_svg(links):
 <path d="M770 560v22M1050 560v22" stroke="{I}" stroke-width="8" stroke-linecap="round"/>
 <!-- donkere hoek -->
 <text x="1050" y="46" class="lbl" fill="{I}" opacity=".7" style="font-size:28px">donkere hoek</text>
-<text x="440" y="540" class="lbl" fill="#9A7400">licht</text>
+<text x="548" y="606" class="lbl" fill="#9A7400">licht</text>
 <!-- vrij plekje op de vensterbank -->
 <g class="free"><path d="M352 404h44l-6 -30h-32Z" fill="none" stroke="{I}" stroke-width="4" stroke-dasharray="6 6" stroke-linejoin="round"/>
 <text x="374" y="368" text-anchor="middle" class="lbl" style="font-size:30px">?</text></g>'''
-    plants, tags = '', ''
+    def one(pl, x, y, s, hang, ghost, href, plain):
+        h = ''
+        if hang:
+            top = y - 330 * s
+            h = f'<path d="M{x} 0V{top:.0f}M{x} {top:.0f}L{x-48*s:.0f} {y-150*s:.0f}M{x} {top:.0f}L{x+48*s:.0f} {y-150*s:.0f}" stroke="{I}" stroke-width="3" fill="none"/>'
+        cls = 'pl ghost' if ghost else 'pl'
+        label = f'{plain}: {pl["tagtxt"]}' + ('. Kan ook hier staan' if ghost else '') + '. Bekijk de reel.'
+        tip = f'{plain}' + (' (kan ook hier)' if ghost else '')
+        return (f'<a class="{cls}" href="{href}" aria-label="{label}"><title>{tip}</title>{h}'
+                f'<rect class="hit" x="{x-125*s:.0f}" y="{y-335*s:.0f}" width="{250*s:.0f}" height="{335*s:.0f}"/>'
+                f'<g class="lift"><g transform="translate({x-150*s:.1f} {y-325*s:.1f}) scale({s})">{pl["art"]()}</g></g></a>')
+    ghosts, plants = '', ''
     for pl in PLANTS:
-        x, y, s = pl['spot']
         href = links.get(pl['slug'], pl['slug'] + '/')
-        plain = pl['name'].replace('­', '')
-        hang = ''
-        if pl.get('hang'):
-            hang = f'<path d="M{x} 0V{y-330*s:.0f}M{x} {y-330*s:.0f}L{x-48*s:.0f} {y-150*s:.0f}M{x} {y-330*s:.0f}L{x+48*s:.0f} {y-150*s:.0f}" stroke="{I}" stroke-width="3" fill="none"/>'
-        tx, ty = pl['tag']
-        w = max(232, round(len(plain) * 12.5 + 64))
-        # stippellijn van kaartje naar plant
-        ax, ay = tx + w / 2, ty + 72
-        px, py = x, y - 260 * s
-        plants += (f'<a class="pl" href="{href}" aria-label="{plain}: {pl["tagtxt"]}. Bekijk de reel.">'
-                   f'{hang}<g class="lift"><g transform="translate({x-150*s:.1f} {y-325*s:.1f}) scale({s})">{pl["art"]()}</g></g>'
-                   f'<path d="M{ax:.0f} {ay:.0f}Q{(ax+px)/2+30:.0f} {(ay+py)/2:.0f} {px:.0f} {py:.0f}" class="lead"/>'
-                   f'<g class="tag"><rect x="{tx}" y="{ty}" width="{w}" height="70" rx="12"/>'
-                   f'<text x="{tx+14}" y="{ty+31}" class="tn">{plain}</text>'
-                   f'<text x="{tx+14}" y="{ty+58}" class="tt">{pl["tagtxt"]}</text>'
-                   f'<circle cx="{tx+w-20}" cy="{ty+22}" r="12" class="pb"/><path d="M{tx+w-24} {ty+16}l10 6-10 6Z" class="pt"/></g></a>')
+        plain = pl['name'].replace('\u00ad', '')
+        x, y, s = pl['spot']
+        plants += one(pl, x, y, s, pl.get('hang'), False, href, plain)
+        for gx, gy, gs, gh in pl.get('ghosts', []):
+            ghosts += one(pl, gx, gy, gs, gh, True, href, plain)
+    plants = ghosts + plants
     return f'<svg class="room" viewBox="0 0 1200 700" role="group" aria-label="Huiskamer met de planten op hun plek">{base}{plants}</svg>'
 
 OV_CSS = r"""
@@ -563,16 +563,15 @@ svg.room .gust:nth-of-type(2){animation-delay:.5s}svg.room .gust:nth-of-type(3){
 .pl{cursor:pointer;outline:none}
 .pl .lift{transition:transform .25s}
 .pl:hover .lift,.pl:focus-visible .lift{transform:translateY(-8px)}
-.pl .lead{fill:none;stroke:var(--ink);stroke-width:3;stroke-dasharray:4 9;stroke-linecap:round}
-.pl .tag rect{fill:var(--paper);stroke:var(--ink);stroke-width:4;filter:drop-shadow(5px 5px 0 var(--ink))}
-.pl:hover .tag rect,.pl:focus-visible .tag rect{fill:var(--ink)}
-.pl:hover .tn,.pl:focus-visible .tn{fill:var(--desk)}
-.pl:hover .tt,.pl:focus-visible .tt{fill:var(--paper)}
-.pl:focus-visible .tag rect{stroke:var(--purple);stroke-width:6}
-.tn{font:800 22px var(--display);fill:var(--ink);letter-spacing:-.01em}
-.tt{font:700 25px var(--hand);fill:var(--leaf)}
-.pb{fill:var(--ink)}.pt{fill:var(--desk)}
-.pl:hover .pb,.pl:focus-visible .pb{fill:var(--desk)}.pl:hover .pt,.pl:focus-visible .pt{fill:var(--ink)}
+.pl .hit{fill:transparent}
+.pl.ghost .lift{opacity:.38;filter:grayscale(1)}
+.pl.ghost path[stroke]{opacity:.5}
+.pl.ghost:hover .lift,.pl.ghost:focus-visible .lift{opacity:.85;filter:none}
+.pl:focus-visible .lift{filter:drop-shadow(0 0 0 transparent) drop-shadow(0 0 6px #5B2A9E)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 22px;font:700 24px/1.1 var(--hand);margin:12px 0 0}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:26px;height:26px;border-radius:50%;background:#5DBB72;border:3px solid var(--ink)}
+.legend i.g{opacity:.38;filter:grayscale(1)}
 h2.all{font:800 clamp(28px,6vw,44px)/1 var(--display);letter-spacing:-.03em;margin:44px 0 16px}
 .mosaic{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:200px;grid-auto-flow:dense;gap:16px}
 .tile{container-type:inline-size;position:relative;display:flex;flex-direction:column;text-decoration:none;color:var(--ink);border:3px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;transition:transform .2s,box-shadow .2s;min-width:0}
@@ -630,6 +629,7 @@ def build_overview():
     main = (f'{defs}<div class="wrap">\n'
             f'<h1>Plantenfiches</h1><p class="hand">welke plant past waar? tik op een plant</p>\n'
             f'<div class="roomwrap">{room_svg(links)}</div>\n'
+            f'<p class="legend"><span><i></i>tik op een plant voor haar fiche</span><span><i class="g"></i>doorschijnend: kan hier ook staan</span></p>\n'
             f'<p class="swipe">veeg ← → door de kamer</p>\n'
             f'<h2 class="all">Alle fiches</h2>\n'
             f'<div class="mosaic">{tiles}</div>\n'
