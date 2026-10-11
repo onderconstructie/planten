@@ -1,4 +1,4 @@
-# Planten in een minuutje
+# Waar zet ik mijn plant?
 
 Korte geanimeerde plantenfiches, gebaseerd op handgetekende notities.
 

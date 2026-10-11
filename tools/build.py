@@ -214,7 +214,7 @@ def page(slug, title, desc, scenes, extra_css=''):
 <meta name="description" content="{desc}">
 <meta name="theme-color" content="#FFD60A">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Minuutje">
+<meta name="apple-mobile-web-app-title" content="Plantplek">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
@@ -664,12 +664,12 @@ def build_overview():
     mini_svg = _re.sub(r'<rect class="hit"[^>]*/>', '', mini_svg)
     mini_svg = _re.sub(r'<a class="([^"]*)"[^>]*>', r'<g class="\1">', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
-    core = f'<title>Planten in een minuutje</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
+    core = f'<title>Waar zet ik mijn plant?</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
-            f'<h1>Planten in een minuutje</h1><p class="hand">welke plant past waar? tik op een plant</p>\n'
+            f'<h1>Waar zet ik mijn plant?</h1><p class="hand">klik op een plant voor haar fiche</p>\n'
             f'<div class="roomwrap">{room_svg(links)}</div>\n'
             f'<div class="mini" id="mini" aria-hidden="true">{mini_svg}<div class="vp" id="vp"><svg class="hand" viewBox="0 0 40 44" aria-hidden="true"><path d="M17 41c-5-3-9-9-10-13-1-3 2-5 4-3l4 4V8c0-3 5-3 5 0v11c0-3 5-3 5 0v2c0-3 5-3 5 0v2c0-3 5-3 5 0v7c0 5-2 8-5 11Z" fill="#FFFDF6" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg></div></div>\n'
-            f'<p class="legend"><span><i></i>tik op een plant voor haar fiche</span><span><i class="g"></i>doorschijnend: kan hier ook staan</span></p>\n'
+            f'<p class="legend"><span><i></i>een plant op haar plek</span><span><i class="g"></i>doorschijnend: kan hier ook staan</span></p>\n'
             f'<section class="info" aria-labelledby="info-t"><svg class="nb" viewBox="0 0 480 300" aria-hidden="true"><ellipse cx="210" cy="282" rx="190" ry="12" fill="#141414" opacity=".18"/><path d="M30 40l170 10v220L30 262Z" fill="#FFFDF6" stroke="#141414" stroke-width="5" stroke-linejoin="round"/><path d="M390 40l-170 10v220l170-8Z" fill="#FFFDF6" stroke="#141414" stroke-width="5" stroke-linejoin="round"/><path d="M200 50h20v220h-20Z" fill="#E8E2D0" stroke="#141414" stroke-width="4"/><path d="M372 40v226" stroke="#141414" stroke-width="7"/><text x="62" y="82" style="font:700 22px var(--hand)" fill="#141414">Pilea</text><g transform="translate(112 196)"><path d="M0 0V-46M0-20l-22-24M0-26l20-26" stroke="#1E7A3C" stroke-width="3" fill="none"/><circle cx="-24" cy="-48" r="13" fill="#5DBB72" stroke="#1E7A3C" stroke-width="3"/><circle cx="21" cy="-56" r="14" fill="#5DBB72" stroke="#1E7A3C" stroke-width="3"/><circle cx="0" cy="-56" r="11" fill="#5DBB72" stroke="#1E7A3C" stroke-width="3"/><path d="M-16 0h32l-4 22h-24Z" fill="#FFE24A" stroke="#141414" stroke-width="3"/></g><rect x="238" y="92" width="80" height="30" rx="6" fill="#CFE9F7" stroke="#2F6FD6" stroke-width="3"/><text x="248" y="114" style="font:700 19px var(--hand)" fill="#2F6FD6">1x/week</text><circle cx="250" cy="152" r="10" fill="#F5C400" stroke="#141414" stroke-width="2.5"/><path d="M268 154h70M240 186h96M240 212h80M240 238h60" stroke="#9AA" stroke-width="3" stroke-linecap="round"/><g transform="translate(270 196) rotate(-28)"><rect x="0" y="-9" width="150" height="18" fill="#2E9E4F" stroke="#141414" stroke-width="4"/><path d="M0 -9L-26 0 0 9Z" fill="#F2D3A8" stroke="#141414" stroke-width="4" stroke-linejoin="round"/><path d="M-26 0l9-3v6Z" fill="#2E9E4F"/></g><g transform="translate(300 232) rotate(-14)"><rect x="0" y="-9" width="140" height="18" fill="#F5C400" stroke="#141414" stroke-width="4"/><path d="M0 -9L-26 0 0 9Z" fill="#F2D3A8" stroke="#141414" stroke-width="4" stroke-linejoin="round"/><path d="M-26 0l9-3v6Z" fill="#F5C400"/></g><g transform="translate(300 266) rotate(-4)"><rect x="0" y="-9" width="120" height="18" fill="#D8263A" stroke="#141414" stroke-width="4"/><path d="M0 -9L-26 0 0 9Z" fill="#F2D3A8" stroke="#141414" stroke-width="4" stroke-linejoin="round"/><path d="M-26 0l9-3v6Z" fill="#D8263A"/></g></svg><div class="info-txt"><h2 id="info-t">Hoe dit gemaakt is</h2><ol><li><span><b>Getekend.</b> Elke plant krijgt een fiche in een schriftje, met kleurpotloden en stiften: verzorging, licht, water, stekken.</span></li><li><span><b>Gefotografeerd.</b> Een foto van die bladzijde is de enige bron.</span></li><li><span><b>Tot leven gebracht.</b> Met hulp van AI (Claude) wordt de foto een korte reel. De tekeningen mogen opgepimpt worden, de informatie niet: wat niet op de fiche staat, komt er niet in.</span></li></ol><p class="info-note">Ook de plek in de huiskamer volgt de fiche. Zegt die niets over licht, dan krijgt de plant geen plek die het wel suggereert.</p></div></section>\n'
             f'</div>\n<script>{OV_JS}</script>\n')
     if ARTIFACT:
@@ -680,7 +680,7 @@ def build_overview():
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
             '<meta name="description" content="Welke plant past waar in je huiskamer? Geanimeerde plantenfiches, getekend in een schriftje.">\n'
             '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n'
-            '<meta name="apple-mobile-web-app-title" content="Minuutje">\n<link rel="manifest" href="manifest.webmanifest">\n'
+            '<meta name="apple-mobile-web-app-title" content="Plantplek">\n<link rel="manifest" href="manifest.webmanifest">\n'
             '<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
             + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
     print('geschreven', path)
