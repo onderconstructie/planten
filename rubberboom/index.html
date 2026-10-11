@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Geanimeerde explainer over de rubberboom (Ficus elastica), gemaakt op basis van een handgetekende plantenfiche.">
+<title>Rubberboom in 60 seconden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: one vertical 9:16 "reel" stage, scenes cross-cut like a short video, controls underneath. Single committed look: marker colours from the notebook on the yellow desk. */
+:root{
+  --desk:#FFD60A; --ink:#141414; --paper:#FFFDF6;
+  --leaf:#2E9E4F; --leaf-lt:#8ED19B; --teal:#0F8A8F; --sun:#F5C400;
+  --blue:#2F6FD6; --purple:#5B2A9E; --red:#D8263A; --pot:#FFE24A;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --hand:"Caveat","Comic Sans MS",cursive;
+  color-scheme:light;
+}
+html,body{height:100%}
+body{background:var(--desk);color:var(--ink);font-family:var(--display);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-inline:16px;padding-block:12px;box-sizing:border-box}
+.stage{position:relative;width:min(100%,calc((100dvh - 150px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7cqw 6cqw 8cqw;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity .35s}
+.scene.on{opacity:1;visibility:visible}
+.tag{font:800 3.6cqw/1 var(--display);letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:1.6cqw 3cqw;border-radius:99px;align-self:flex-start}
+h2{font:800 11cqw/.95 var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;text-align:center}
+.hand{font-family:var(--hand);font-weight:700}
+.sub{font:500 5.4cqw/1.25 var(--display);text-align:center;margin:0;text-wrap:balance}
+.note{font:700 7cqw/1.05 var(--hand);text-align:center}
+svg.art{width:86cqw;height:auto;overflow:visible}
+.scene .a{opacity:0}
+.scene.on .a{animation:pop .55s cubic-bezier(.3,1.6,.5,1) forwards}
+.scene.on .d1{animation-delay:.25s}.scene.on .d2{animation-delay:.6s}.scene.on .d3{animation-delay:1s}.scene.on .d4{animation-delay:1.5s}.scene.on .d5{animation-delay:2.1s}.scene.on .d6{animation-delay:2.7s}
+@keyframes pop{0%{opacity:0;transform:translateY(14px) scale(.6)}100%{opacity:1;transform:none}}
+.grow{transform-box:fill-box;transform-origin:50% 100%}
+.scene.on .grow{animation:leaf .6s cubic-bezier(.3,1.7,.5,1) both}
+@keyframes leaf{0%{transform:scale(0) rotate(-20deg)}100%{transform:none}}
+.chip{display:inline-block;border:3px solid currentColor;border-radius:14px;padding:1cqw 3cqw;font:700 8cqw/1 var(--hand)}
+
+/* 1 intro */
+#s1{background:var(--leaf);color:var(--paper)}
+#s1 .tag{background:var(--paper);color:var(--leaf)}
+#s1 h2{font-size:14cqw}
+/* 2 dust */
+#s2{background:#F4EEFF}
+.dust circle{fill:#9a8f7a}
+.scene.on .dust{animation:dust 2.6s 1.2s forwards}
+@keyframes dust{to{opacity:0;transform:translateX(30px)}}
+.scene.on .wipe{animation:wipe 1.6s 1.1s ease-in-out forwards}
+@keyframes wipe{0%{transform:translate(-90px,40px)}50%{transform:translate(40px,-10px)}100%{transform:translate(160px,-60px);opacity:0}}
+.scene.on .shine{animation:shine 1s 2.6s forwards}
+@keyframes shine{from{opacity:0}to{opacity:1}}
+/* 3 water */
+#s3{background:#DDF4F3;color:var(--ink)}
+#s3 h2{color:var(--teal)}
+.mist{transform-box:fill-box;transform-origin:100% 50%}
+.scene.on .mist{animation:mist 1s .5s 3 ease-out}
+@keyframes mist{0%{opacity:0;transform:scale(.3)}40%{opacity:1}100%{opacity:0;transform:scale(1.2)}}
+.drop{transform-box:fill-box}
+.scene.on .drop{animation:fall 1.4s ease-in infinite}
+@keyframes fall{0%{transform:translateY(-30px);opacity:0}20%{opacity:1}100%{transform:translateY(70px);opacity:0}}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:1.5cqw;width:100%}
+.week span{aspect-ratio:1;border:2.5px solid var(--teal);border-radius:8px;display:grid;place-items:center;font:800 3.6cqw var(--display);color:var(--teal)}
+.week span.w{background:var(--teal);color:var(--paper)}
+/* 4 light */
+#s4{background:#FFF6C2}
+.rays{transform-box:fill-box;transform-origin:center}
+.scene.on .rays{animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.in{display:inline-block;color:var(--ink);text-decoration:underline;text-decoration-thickness:.12em;text-underline-offset:.08em}
+.scene.on .in{animation:slam .5s 1.2s cubic-bezier(.3,1.8,.5,1) both}
+@keyframes slam{0%{transform:translateY(-120%) scale(2);opacity:0}100%{transform:none;opacity:1}}
+#s4 h2 .dir{color:#B58F00}
+/* 5 draft */
+#s5{background:#E3ECFF}
+.scene.on .shiver{animation:shiver .12s .8s 24 alternate}
+@keyframes shiver{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+.shiver{transform-box:fill-box;transform-origin:50% 100%}
+.gust{stroke-dasharray:120;stroke-dashoffset:120}
+.scene.on .gust{animation:gust 1.1s ease-out infinite}
+.scene.on .gust:nth-of-type(2){animation-delay:.35s}.scene.on .gust:nth-of-type(3){animation-delay:.7s}
+@keyframes gust{0%{stroke-dashoffset:120;opacity:1}100%{stroke-dashoffset:-120;opacity:0}}
+.cross{stroke-dasharray:300;stroke-dashoffset:300}
+.scene.on .cross{animation:draw .5s 2.2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+/* 6 food */
+#s6{background:var(--purple);color:var(--paper)}
+#s6 .tag{background:var(--paper);color:var(--purple)}
+.year{display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;width:100%}
+.season{border:2.5px solid var(--paper);border-radius:12px;padding:2cqw;text-align:center}
+.season b{display:block;font:800 3.6cqw var(--display);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.5cqw}
+.season i{display:inline-block;width:3.4cqw;height:3.4cqw;border-radius:50%;margin:.5cqw;border:2px solid var(--paper)}
+.season.yes i:nth-child(odd){background:var(--paper)}
+.season.no{opacity:.35}
+.glow{transform-box:fill-box;transform-origin:center}
+.scene.on .glow{animation:glow 1.2s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.3}to{opacity:1}}
+/* 7 prune */
+#s7{background:#E6F6E3}
+#s7 h2{color:var(--leaf)}
+.snip{transform-box:fill-box;transform-origin:50% 60%}
+.scene.on .snip{animation:snip .25s .6s 4 alternate}
+@keyframes snip{to{transform:rotate(-14deg)}}
+.top{transform-box:fill-box}
+.scene.on .top{animation:lift 1s 1.7s forwards}
+@keyframes lift{to{transform:translate(70px,-30px) rotate(25deg)}}
+.branch{transform-box:fill-box;transform-origin:50% 100%;transform:scale(0)}
+.scene.on .branch{animation:leaf .6s 2.4s cubic-bezier(.3,1.7,.5,1) forwards}
+.scene.on .branch.b2{animation-delay:2.7s}.scene.on .branch.b3{animation-delay:3s}
+.cuts{display:grid;grid-template-columns:1fr 1fr;gap:3cqw;width:100%}
+.cuts div{border:3px solid var(--leaf);border-radius:16px;padding:3cqw;text-align:center;font:700 6.4cqw/1.05 var(--hand);color:var(--ink);background:var(--paper)}
+.cuts small{display:block;font:800 3.4cqw var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--leaf);margin-bottom:1cqw}
+/* 8 toxic */
+#s8{background:var(--red);color:var(--paper)}
+#s8 .tag{background:var(--paper);color:var(--red)}
+.ooze{transform-box:fill-box}
+.scene.on .ooze{animation:ooze 1.6s .6s ease-in infinite}
+@keyframes ooze{0%{transform:translateY(0) scale(.2);opacity:0}30%{opacity:1;transform:scale(1)}100%{transform:translateY(90px);opacity:0}}
+/* 9 formaldehyde */
+#s9{background:var(--paper)}
+#s9 h2{color:var(--red);font-size:9.6cqw}
+.mol{font:800 6cqw var(--display);fill:var(--red)}
+.src{display:flex;flex-direction:column;gap:2cqw;width:100%}
+.src span{border-left:5px solid var(--ink);padding-left:3cqw;font:700 7cqw/1 var(--hand)}
+.need{background:var(--leaf);color:var(--paper);border-radius:16px;padding:3cqw 5cqw;font:800 6.2cqw/1.1 var(--display);text-align:center;width:100%;box-sizing:border-box}
+/* 10 recap */
+#s10{background:var(--ink);color:var(--paper);justify-content:center;gap:5cqw}
+#s10 .tag{background:var(--desk);color:var(--ink);align-self:center}
+.recap{display:grid;grid-template-columns:1fr 1fr;gap:2.5cqw;width:100%}
+.recap div{border-radius:14px;padding:3cqw;font:700 6cqw/1.02 var(--hand);color:var(--ink)}
+.recap b{display:block;font:800 3.2cqw var(--display);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1cqw}
+
+/* progress + controls */
+.bars{position:absolute;top:2.4cqw;left:4cqw;right:4cqw;display:flex;gap:1.2cqw;z-index:5}
+.bars i{flex:1;height:5px;border-radius:9px;background:rgba(20,20,20,.18);overflow:hidden}
+.bars i b{display:block;height:100%;width:0;background:var(--ink)}
+.dark .bars i{background:rgba(255,253,246,.3)}.dark .bars i b{background:var(--paper)}
+.ctrl{display:flex;gap:10px;align-items:center}
+.ctrl button{font:800 15px var(--display);background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:99px;padding:8px 16px;box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+.ctrl button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.ctrl button:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+#play{min-width:96px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}.scene .a{opacity:1}.branch{transform:none}}
+</style>
+</head>
+<body>
+<a class="home" href="../" aria-label="Terug naar Planten">&larr; Planten</a>
+<style>.home{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:12px;font:700 14px var(--display);color:var(--ink);text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:4px 12px;z-index:10}.home:focus-visible{outline:3px solid var(--purple)}body{padding-top:52px}</style>
+
+
+<div class="stage" id="stage" aria-live="polite">
+  <div class="bars" id="bars"></div>
+
+  <!-- 1 -->
+  <section class="scene" id="s1" data-dur="5200" data-dark>
+    <span class="tag a">Plantenfiche</span>
+    <svg class="art" viewBox="0 0 300 330" aria-hidden="true">
+      <defs>
+        <g id="lf">
+          <path d="M0 0C-38-18-40-70 0-100C40-70 38-18 0 0Z" fill="#8ED19B" stroke="#141414" stroke-width="4"/>
+          <path d="M0-4V-92" stroke="#2E9E4F" stroke-width="3.5"/>
+          <path d="M0-30l-18-12M0-50l-20-12M0-70l-14-10M0-30l18-12M0-50l20-12M0-70l14-10" stroke="#2E9E4F" stroke-width="2.5" fill="none"/>
+        </g>
+      </defs>
+      <ellipse cx="150" cy="318" rx="80" ry="10" fill="#141414" opacity=".35"/>
+      <path d="M150 300V40" stroke="#141414" stroke-width="5"/>
+      <g class="grow" style="animation-delay:.2s"><use href="#lf" transform="translate(150 250) rotate(-62) scale(.9)"/></g>
+      <g class="grow" style="animation-delay:.35s"><use href="#lf" transform="translate(150 240) rotate(58) scale(.9)"/></g>
+      <g class="grow" style="animation-delay:.5s"><use href="#lf" transform="translate(150 190) rotate(-55) scale(.85)"/></g>
+      <g class="grow" style="animation-delay:.65s"><use href="#lf" transform="translate(150 160) rotate(52) scale(.85)"/></g>
+      <g class="grow" style="animation-delay:.8s"><use href="#lf" transform="translate(150 115) rotate(-40) scale(.75)"/></g>
+      <g class="grow" style="animation-delay:.95s"><use href="#lf" transform="translate(150 95) rotate(35) scale(.7)"/></g>
+      <g class="grow" style="animation-delay:1.1s"><use href="#lf" transform="translate(150 50) rotate(-6) scale(.55)"/></g>
+      <path d="M95 240h110l-14 70H109Z" fill="#FFE24A" stroke="#141414" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M88 232h124v14H88Z" fill="#FFE24A" stroke="#141414" stroke-width="5" stroke-linejoin="round"/>
+    </svg>
+    <div style="text-align:center">
+      <h2 class="a d3">Ficus elastica</h2>
+      <p class="note a d4" style="font-size:10cqw;color:var(--pot)">de rubberboom</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="scene" id="s2" data-dur="5200">
+    <span class="tag a">Verzorging</span>
+    <svg class="art" viewBox="0 0 300 260" aria-hidden="true">
+      <g transform="translate(150 240) rotate(-25) scale(2.2)"><use href="#lf"/></g>
+      <g class="dust"><circle cx="110" cy="120" r="4"/><circle cx="130" cy="90" r="3"/><circle cx="150" cy="140" r="5"/><circle cx="170" cy="100" r="3.5"/><circle cx="120" cy="160" r="3"/><circle cx="160" cy="70" r="4"/><circle cx="185" cy="130" r="3"/><circle cx="100" cy="190" r="4"/></g>
+      <g class="shine" opacity="0"><path d="M205 60l6 14 14 6-14 6-6 14-6-14-14-6 14-6Z" fill="#FFD60A" stroke="#141414" stroke-width="3"/><path d="M90 80l4 9 9 4-9 4-4 9-4-9-9-4 9-4Z" fill="#FFD60A" stroke="#141414" stroke-width="3"/></g>
+      <g class="wipe"><rect x="100" y="130" width="70" height="56" rx="6" fill="#fff" stroke="#141414" stroke-width="4" transform="rotate(-12 135 158)"/><path d="M110 150q15 8 30 0t30 0M108 168q15 8 30 0t30 0" stroke="#2F6FD6" stroke-width="3" fill="none" transform="rotate(-12 135 158)"/></g>
+    </svg>
+    <div style="text-align:center;display:flex;flex-direction:column;gap:3cqw">
+      <h2 class="a d2">Afstoffen!</h2>
+      <p class="note a d4" style="color:var(--purple)">met nat keukenpapier</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="scene" id="s3" data-dur="6500">
+    <span class="tag a">Water</span>
+    <svg class="art" viewBox="0 0 300 200" aria-hidden="true" style="width:70cqw">
+      <path d="M150 70h40v-24c22 0 30 14 30 30v8h-16v-8c0-6-4-10-10-10" fill="#141414"/>
+      <rect x="150" y="56" width="16" height="20" fill="#141414"/>
+      <path d="M170 76L120 180h110Z" fill="#2F9FB0" stroke="#141414" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M150 120l40 0M140 140l60 0M130 160l80 0" stroke="#0F8A8F" stroke-width="3"/>
+      <g class="mist"><path d="M146 66l-40-26M146 66l-46-6M146 66l-44 14M146 66l-36 30M146 66l-28-38" stroke="#0F8A8F" stroke-width="4" stroke-linecap="round"/></g>
+      <g fill="#0F8A8F"><path class="drop" d="M50 110c-8 12-8 20 0 20s8-8 0-20Z"/><path class="drop" style="animation-delay:.5s" d="M75 100c-8 12-8 20 0 20s8-8 0-20Z"/><path class="drop" style="animation-delay:.9s" d="M30 95c-8 12-8 20 0 20s8-8 0-20Z"/></g>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:3cqw;align-items:center;width:100%">
+      <p class="note a d1">≋ grond licht vochtig</p>
+      <h2 class="a d2">Niet veel water</h2>
+      <div class="week a d3" aria-label="één keer per week"><span>ma</span><span>di</span><span class="w">wo</span><span>do</span><span>vr</span><span>za</span><span>zo</span></div>
+      <span class="chip a d4" style="color:var(--teal)">1x / week</span>
+      <p class="sub a d5">meer in de zomer</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="scene" id="s4" data-dur="5200">
+    <span class="tag a">Licht</span>
+    <svg class="art" viewBox="0 0 300 240" aria-hidden="true" style="width:66cqw">
+      <g class="rays"><g stroke="#141414" stroke-width="6" stroke-linecap="round"><path d="M150 20v28M150 192v28M30 120h28M242 120h28M65 35l20 20M215 185l20 20M65 205l20-20M215 55l20-20"/></g></g>
+      <circle cx="150" cy="120" r="58" fill="#F5C400" stroke="#141414" stroke-width="6"/>
+      <circle cx="150" cy="120" r="26" fill="#141414"/>
+      <rect x="40" y="96" width="220" height="48" rx="8" fill="#FFFDF6" opacity=".75" class="a d4"/>
+    </svg>
+    <div style="text-align:center">
+      <h2><span class="in">in</span><span class="dir">direct</span><br>zonlicht</h2>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="scene" id="s5" data-dur="5200">
+    <span class="tag a">Plaats</span>
+    <svg class="art" viewBox="0 0 300 240" aria-hidden="true">
+      <g transform="translate(10 40)">
+        <path d="M30 60c-10-30 20-50 40-35 10-25 50-25 55 5 25 0 30 35 5 40-5 20-40 25-55 10-20 10-50 0-45-20Z" fill="#6E9BE6" stroke="#141414" stroke-width="5"/>
+        <path d="M60 55l12 6M95 55l-12 6" stroke="#141414" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="80" cy="80" rx="8" ry="10" fill="#141414"/>
+      </g>
+      <g stroke="#2F6FD6" stroke-width="6" fill="none" stroke-linecap="round">
+        <path class="gust" d="M120 100q30-10 60 0t50-6"/>
+        <path class="gust" d="M110 130q35-8 70 0t55 4"/>
+        <path class="gust" d="M120 160q30 8 60 0t50 8"/>
+      </g>
+      <g class="shiver" transform="translate(245 230)">
+        <path d="M0 -10V-110" stroke="#141414" stroke-width="4"/>
+        <use href="#lf" transform="translate(0 -60) rotate(-55) scale(.5)"/>
+        <use href="#lf" transform="translate(0 -80) rotate(50) scale(.5)"/>
+        <use href="#lf" transform="translate(0 -105) rotate(-5) scale(.4)"/>
+        <path d="M-22 -20h44l-6 24h-32Z" fill="#FFE24A" stroke="#141414" stroke-width="4"/>
+      </g>
+      <path class="cross" d="M20 30L280 220M280 30L20 220" stroke="#D8263A" stroke-width="10" stroke-linecap="round"/>
+    </svg>
+    <h2 class="a d4">Niet in de tocht zetten</h2>
+  </section>
+
+  <!-- 6 -->
+  <section class="scene" id="s6" data-dur="6200" data-dark>
+    <span class="tag a">Voeding</span>
+    <svg class="art" viewBox="0 0 300 180" aria-hidden="true" style="width:46cqw">
+      <g class="glow" stroke="#FFFDF6" stroke-width="6" stroke-linecap="round"><path d="M150 10v18M150 152v18M80 90h18M202 90h18M100 40l12 12M188 128l12 12M100 140l12-12M188 52l12-12"/></g>
+      <rect x="128" y="45" width="44" height="90" rx="22" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
+      <path d="M128 90h44v23a22 22 0 0 1-44 0Z" fill="#B48CF0" stroke="#141414" stroke-width="5"/>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:4cqw;align-items:center;width:100%">
+      <h2 class="a d1">Om de 2 weken</h2>
+      <div class="year a d3">
+        <div class="season yes"><b>Lente</b><i></i><i></i><i></i><i></i></div>
+        <div class="season yes"><b>Zomer</b><i></i><i></i><i></i><i></i></div>
+        <div class="season no"><b>Herfst</b><i></i><i></i><i></i><i></i></div>
+        <div class="season no"><b>Winter</b><i></i><i></i><i></i><i></i></div>
+      </div>
+      <p class="sub a d4">Alleen in lente en zomer.</p>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="scene" id="s7" data-dur="7600">
+    <span class="tag a">Snoeien &amp; stekken</span>
+    <svg class="art" viewBox="0 0 300 230" aria-hidden="true" style="width:78cqw">
+      <g transform="translate(110 225)">
+        <path d="M0-20V-140" stroke="#141414" stroke-width="5"/>
+        <use href="#lf" transform="translate(0 -70) rotate(-60) scale(.6)"/>
+        <use href="#lf" transform="translate(0 -95) rotate(55) scale(.6)"/>
+        <g class="branch"><path d="M0-130l-34-36" stroke="#141414" stroke-width="4"/><use href="#lf" transform="translate(-34 -166) rotate(-30) scale(.45)"/></g>
+        <g class="branch b2"><path d="M0-130l34-36" stroke="#141414" stroke-width="4"/><use href="#lf" transform="translate(34 -166) rotate(30) scale(.45)"/></g>
+        <g class="branch b3"><use href="#lf" transform="translate(0 -130) rotate(-90) scale(.42)"/></g>
+        <path d="M-30-22h60l-8 30h-44Z" fill="#FFE24A" stroke="#141414" stroke-width="5"/>
+      </g>
+      <g class="top"><path d="M110 85V48" stroke="#141414" stroke-width="5"/><use href="#lf" transform="translate(110 60) rotate(-40) scale(.45)"/><use href="#lf" transform="translate(110 50) rotate(20) scale(.4)"/></g>
+      <g class="snip" transform="translate(150 92)">
+        <path d="M0 0l60-14c10-2 14 10 4 14L0 0Z" fill="#141414"/>
+        <path d="M0 0l60 14c10 2 14-10 4-14L0 0Z" fill="#141414"/>
+        <circle cx="0" cy="0" r="6" fill="#FFFDF6" stroke="#141414" stroke-width="3"/>
+      </g>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:4cqw;align-items:center;width:100%">
+      <h2 class="a d3" style="font-size:9.4cqw">Snoei de top<br>om uit te struiken</h2>
+      <div class="cuts a d5">
+        <div><small>Stek 1</small>bladeren in water</div>
+        <div><small>Stek 2</small>top met bladeren stekken</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="scene" id="s8" data-dur="4800" data-dark>
+    <span class="tag a">Let op</span>
+    <svg class="art" viewBox="0 0 300 260" aria-hidden="true" style="width:66cqw">
+      <g transform="translate(150 110)">
+        <circle r="62" fill="#FFFDF6" stroke="#141414" stroke-width="6"/>
+        <circle cx="-22" cy="-8" r="15" fill="#141414"/><circle cx="22" cy="-8" r="15" fill="#141414"/>
+        <path d="M-5 18l5-10 5 10Z" fill="#141414"/>
+        <path d="M-26 40v14M-9 42v14M9 42v14M26 40v14" stroke="#141414" stroke-width="5"/>
+        <path d="M-90 70L90 -70M-90 -70L90 70" stroke="#FFFDF6" stroke-width="12" stroke-linecap="round" opacity=".25"/>
+      </g>
+      <path class="ooze" d="M232 160c-12 18-12 30 0 30s12-12 0-30Z" fill="#FFFDF6" stroke="#141414" stroke-width="4"/>
+    </svg>
+    <div style="text-align:center">
+      <h2 class="a d2" style="font-size:15cqw">Sap is giftig!</h2>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="scene" id="s9" data-dur="8000">
+    <span class="tag a">Luchtfilter</span>
+    <h2 class="a d1">Formaldehyde <span style="color:var(--ink);font-weight:500">(methanal)</span></h2>
+    <svg class="art" viewBox="0 0 300 150" aria-hidden="true" style="width:70cqw">
+      <g class="a d2">
+        <text x="140" y="34" class="mol">O</text>
+        <path d="M144 44v34M156 44v34" stroke="#D8263A" stroke-width="5"/>
+        <text x="140" y="108" class="mol">C</text>
+        <path d="M134 108l-34 22M168 108l34 22" stroke="#D8263A" stroke-width="5"/>
+        <text x="80" y="146" class="mol">H</text><text x="204" y="146" class="mol">H</text>
+      </g>
+      <text x="236" y="70" class="mol a d3" style="font-size:22px">CH₂O</text>
+    </svg>
+    <div class="src">
+      <span class="a d3">spaanplaat, mdf</span>
+      <span class="a d4">textiel</span>
+      <span class="a d5">ontsmettingsmiddel</span>
+    </div>
+    <div class="need a d6">1 à 3 planten nodig</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="scene" id="s10" data-dur="7000" data-dark>
+    <span class="tag a">Samengevat</span>
+    <h2 class="a d1" style="font-size:10cqw">Rubberboom-<br>checklist</h2>
+    <div class="recap">
+      <div class="a d2" style="background:var(--leaf-lt)"><b>Blad</b>afstoffen, nat keukenpapier</div>
+      <div class="a d2" style="background:#8FD3D5"><b>Water</b>1x/week, meer in de zomer</div>
+      <div class="a d3" style="background:var(--sun)"><b>Licht</b>indirect zonlicht</div>
+      <div class="a d3" style="background:#AFC7F5"><b>Plaats</b>niet in de tocht</div>
+      <div class="a d4" style="background:#CDB4F5"><b>Voeding</b>om de 2 weken, lente + zomer</div>
+      <div class="a d4" style="background:#F59AA5"><b>Opgelet</b>sap is giftig</div>
+    </div>
+  </section>
+</div>
+
+<div class="ctrl">
+  <button id="prev" type="button" aria-label="Vorige scène">◀</button>
+  <button id="play" type="button">Pauze</button>
+  <button id="next" type="button" aria-label="Volgende scène">▶</button>
+</div>
+
+<script>
+(function(){
+  const stage=document.getElementById('stage');
+  const scenes=[...stage.querySelectorAll('.scene')];
+  const bars=document.getElementById('bars');
+  scenes.forEach(()=>{const i=document.createElement('i');i.appendChild(document.createElement('b'));bars.appendChild(i)});
+  const fills=[...bars.querySelectorAll('b')];
+  const playBtn=document.getElementById('play');
+  let idx=0,playing=true,elapsed=0,last=performance.now();
+  function show(n){
+    idx=(n+scenes.length)%scenes.length;elapsed=0;
+    scenes.forEach((s,i)=>{s.classList.remove('on');});
+    void stage.offsetWidth;
+    scenes[idx].classList.add('on');
+    stage.classList.toggle('dark',scenes[idx].hasAttribute('data-dark'));
+    fills.forEach((f,i)=>f.style.width=i<idx?'100%':'0%');
+  }
+  function tick(t){
+    const dt=t-last;last=t;
+    if(playing){
+      elapsed+=dt;const d=+scenes[idx].dataset.dur;
+      fills[idx].style.width=Math.min(100,elapsed/d*100)+'%';
+      if(elapsed>=d){ if(idx===scenes.length-1){playing=false;playBtn.textContent='Opnieuw';} else show(idx+1); }
+    }
+    requestAnimationFrame(tick);
+  }
+  function setPlay(p){playing=p;playBtn.textContent=p?'Pauze':'Speel';stage.querySelectorAll('.scene.on *').forEach(el=>el.style.animationPlayState=p?'running':'paused')}
+  playBtn.addEventListener('click',()=>{ if(playBtn.textContent==='Opnieuw'){show(0);setPlay(true);} else setPlay(!playing); });
+  stage.addEventListener('click',()=>playBtn.click());
+  document.getElementById('prev').addEventListener('click',()=>{show(idx-1);setPlay(true)});
+  document.getElementById('next').addEventListener('click',()=>{show(idx+1);setPlay(true)});
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();if(e.key==='ArrowLeft')document.getElementById('prev').click();if(e.key===' '){e.preventDefault();playBtn.click()}});
+  show(0);requestAnimationFrame(tick);
+})();
+</script>
+
+</body>
+</html>
