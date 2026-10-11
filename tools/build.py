@@ -457,64 +457,92 @@ def ficus_plant():
             f'<path d="M95 240h110l-14 70H109Z" fill="#FFE24A" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>'
             f'<path d="M88 232h124v14H88Z" fill="#FFE24A" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>')
 
-# Elke nieuwe plant: een regel hier. Feiten alleen van de fiche.
+# Elke nieuwe plant: een blok hier. Alles komt van de fiche.
+# licht: welke filters bij deze plant horen ('weinig' en/of 'veel'), alleen als de fiche het zegt.
+# water: 'weinig' (zeer weinig), 'week' (1x per week) of 'ruim'.
 PLANTS = [
   dict(slug='rubberboom', name='Rubberboom', sci='Ficus elastica', tint='#BFE6C6', art=ficus_plant, vb='30 -10 240 345',
-       facts=['1x / week water', 'indirect licht', 'luchtfilter: 1 à 3'], lucht=True, toxic=True),
-  dict(slug='pannenkoekenplant', name='Pannenkoeken\u00adplant', sci='Pilea peperomioides', tint='#CFEFF0', art=lambda: pilea_plant(), vb='10 15 280 320',
-       facts=['1x / week water', 'veel indirect licht', "stekken via baby'tjes"], lucht=False, toxic=False),
+       licht=[], licht_txt='indirect', water='week', water_txt='1x / week', lucht=True, toxic=True),
+  dict(slug='pannenkoekenplant', name='Pannenkoeken­plant', sci='Pilea peperomioides', tint='#CFEFF0', art=lambda: pilea_plant(), vb='10 15 280 320',
+       licht=['veel'], licht_txt='indirect, veel', water='week', water_txt='1x / week', lucht=False, toxic=False),
   dict(slug='vrouwentong', name='Vrouwentong', sci='Sansevieria', tint='#FFF1A8', art=sans_plant, vb='40 -20 220 360',
-       facts=['1x / 4 weken water', 'weinig tot veel licht', 'luchtfilter: 6 à 8'], lucht=True, toxic=False),
+       licht=['weinig', 'veel'], licht_txt='weinig tot veel', water='weinig', water_txt='1x / 4 weken', lucht=True, toxic=False),
   dict(slug='graslelie', name='Graslelie', sci='Chlorophytum comosum', tint='#DCE6FF', art=lambda: chloro_plant(), vb='20 20 280 310',
-       facts=['ruim water, laat uitdrogen', 'indirect licht', 'luchtfilter: 4 à 6'], lucht=True, toxic=False),
+       licht=['weinig', 'veel'], licht_txt='veel of weinig', water='ruim', water_txt='ruim', lucht=True, toxic=False),
+]
+
+ICON = {
+  'licht': '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="#F5C400" stroke="#141414" stroke-width="2"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" stroke="#141414" stroke-width="2" stroke-linecap="round"/></svg>',
+  'water': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C7 9.5 5.5 12.5 5.5 15.3a6.5 6.5 0 0 0 13 0c0-2.8-1.5-5.8-6.5-12.8Z" fill="#7FC8E8" stroke="#141414" stroke-width="2" stroke-linejoin="round"/></svg>',
+  'lucht': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h8" fill="none" stroke="#141414" stroke-width="2.2" stroke-linecap="round"/></svg>',
+}
+
+FILTERS = [
+  ('licht', 'Licht', [('weinig', 'weinig'), ('veel', 'veel')]),
+  ('water', 'Water', [('weinig', 'zeer weinig'), ('week', '1x / week'), ('ruim', 'ruim')]),
+  ('lucht', 'Luchtfilter', [('ja', 'ja')]),
 ]
 
 OV_CSS = r"""
 :root{--desk:#FFD60A;--ink:#141414;--paper:#FFFDF6;--leaf:#2E9E4F;--red:#D8263A;--purple:#5B2A9E;
 --display:"Bricolage Grotesque",system-ui,sans-serif;--hand:"Caveat","Comic Sans MS",cursive;color-scheme:light}
 body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)}
+[hidden]{display:none!important}
 .wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
-.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:24px}
 h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
-.hand{font:700 clamp(24px,5vw,34px)/1 var(--hand);margin:8px 0 0}
-.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.tools input{font:600 16px var(--display);color:var(--ink);border:3px solid var(--ink);border-radius:99px;padding:9px 16px;background:var(--paper);box-shadow:3px 3px 0 var(--ink);min-width:0;width:200px;max-width:100%}
-.tools input::placeholder{color:#6b6b5e}
-.chipbtn{font:800 14px var(--display);border:3px solid var(--ink);border-radius:99px;padding:9px 14px;background:var(--paper);color:var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:pointer}
-.chipbtn[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
-input:focus-visible,.chipbtn:focus-visible,.tile:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
-.sr{position:absolute;left:-9999px}
-.mosaic{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:180px;grid-auto-flow:dense;gap:16px}
-.tile{position:relative;display:flex;flex-direction:column;text-decoration:none;color:var(--ink);border:3px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;transition:transform .2s,box-shadow .2s;min-width:0}
+.hand{font:700 clamp(26px,5.4vw,36px)/1 var(--hand);margin:8px 0 22px}
+.filters{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-bottom:24px}
+.group{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:0;margin:0;padding:0;min-width:0}
+.group legend{float:left;display:flex;align-items:center;gap:6px;font:700 26px/1 var(--hand);margin-right:4px;padding:0}
+.group legend svg{width:24px;height:24px}
+.chip{font:800 14px var(--display);border:3px solid var(--ink);border-radius:99px;padding:7px 13px;background:var(--paper);color:var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
+.chip:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.reset{font:700 24px var(--hand);background:none;border:0;color:var(--ink);text-decoration:underline;cursor:pointer;padding:0}
+.chip:focus-visible,.tile:focus-visible,.reset:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+.mosaic{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:200px;grid-auto-flow:dense;gap:16px}
+.tile{container-type:inline-size;position:relative;display:flex;flex-direction:column;text-decoration:none;color:var(--ink);border:3px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;transition:transform .2s,box-shadow .2s;min-width:0}
 .tile:hover{transform:translate(-2px,-3px);box-shadow:8px 9px 0 var(--ink)}
 .tile.big{grid-column:span 2;grid-row:span 2}
 .tile.tall{grid-row:span 2}
 .tile.wide{grid-column:span 2}
 .tile svg.plant{flex:1;min-height:0;width:100%;padding:8px;box-sizing:border-box}
-.label{background:var(--paper);border-top:3px solid var(--ink);padding:8px 12px 10px;display:flex;flex-direction:column;gap:2px}
-.sci{font:700 18px/1 var(--hand);color:var(--leaf);overflow-wrap:anywhere}
-.name{font:800 20px/1.05 var(--display);letter-spacing:-.02em;margin:0;overflow-wrap:break-word;hyphens:manual}
-.big .name{font-size:30px}.big .sci{font-size:24px}
-.facts{display:none;list-style:none;margin:6px 0 0;padding:0;flex-wrap:wrap;gap:6px}
-.big .facts{display:flex}
-.facts li{font:600 13px/1.2 var(--display);border:2px solid var(--ink);border-radius:9px;padding:3px 8px}
+.label{background:var(--paper);border-top:3px solid var(--ink);padding:8px 12px 10px;display:flex;flex-direction:column;gap:3px}
+.sci{font:700 19px/1 var(--hand);color:var(--leaf);overflow-wrap:break-word}
+.name{font:800 clamp(14px,10.5cqi,20px)/1.05 var(--display);letter-spacing:-.02em;margin:0;overflow-wrap:normal;hyphens:manual}
+.big .name{font-size:clamp(22px,9cqi,30px)}.big .sci{font-size:25px}
+.needs{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 10px}
+.needs li{display:flex;align-items:center;gap:4px;font:700 19px/1 var(--hand)}
+.needs svg{width:17px;height:17px;flex:none}
+.big .needs li{font-size:23px}.big .needs svg{width:20px;height:20px}
 .badge{position:absolute;top:10px;right:10px;font:800 10px var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:var(--paper);border-radius:99px;padding:4px 8px;z-index:1}
 .play{position:absolute;top:10px;left:10px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--desk);display:grid;place-items:center;font-size:11px;z-index:1}
-.soon{border:3px dashed var(--ink);border-radius:18px;display:grid;place-items:center;text-align:center;padding:14px;font:700 26px/1 var(--hand)}
-.empty{font:700 28px var(--hand);text-align:center;padding:40px 0}
-.foot{margin-top:40px;font:600 14px/1.5 var(--display);max-width:62ch}
+.soon{border:3px dashed var(--ink);border-radius:18px;display:grid;place-items:center;text-align:center;padding:14px;font:700 28px/1 var(--hand)}
+.empty{font:700 30px var(--hand);text-align:center;padding:30px 0}
+.foot{margin-top:40px;font:700 22px/1.2 var(--hand);max-width:52ch}
+@media (max-width:520px){.filters{gap:10px}.chip{padding:6px 11px;font-size:13px}.group legend{font-size:24px}.mosaic{grid-auto-rows:215px}}
 @media (max-width:360px){.mosaic{grid-template-columns:1fr}.tile.big,.tile.wide{grid-column:span 1}}
 @media (prefers-reduced-motion:reduce){.tile{transition:none}}
 """
 
 OV_JS = r"""
 (function(){
- const q=document.getElementById('q'),f=document.getElementById('lucht'),tiles=[...document.querySelectorAll('.tile')],soon=document.getElementById('soon'),empty=document.getElementById('empty');
- function run(){const t=q.value.trim().toLowerCase(),only=f.getAttribute('aria-pressed')==='true';let n=0;
-  tiles.forEach(c=>{const ok=(!t||c.dataset.s.includes(t))&&(!only||c.dataset.lucht==='1');c.hidden=!ok;if(ok)n++});
-  soon.hidden=!!t||only;empty.hidden=n>0;}
- q.addEventListener('input',run);
- f.addEventListener('click',()=>{f.setAttribute('aria-pressed',f.getAttribute('aria-pressed')==='true'?'false':'true');run()});
+ const chips=[...document.querySelectorAll('.chip')],tiles=[...document.querySelectorAll('.tile')];
+ const soon=document.getElementById('soon'),empty=document.getElementById('empty'),reset=document.getElementById('reset');
+ function run(){
+  const act={};chips.forEach(c=>{if(c.getAttribute('aria-pressed')==='true')act[c.dataset.g]=c.dataset.v});
+  const any=Object.keys(act).length>0;let n=0;
+  tiles.forEach(t=>{const ok=Object.entries(act).every(([g,v])=>(' '+t.dataset[g]+' ').includes(' '+v+' '));t.hidden=!ok;if(ok)n++});
+  const SZ=['big','tall','','wide',''];let k=0;
+  tiles.forEach(t=>{t.classList.remove('big','tall','wide');if(!t.hidden){const z=SZ[k%SZ.length];if(z)t.classList.add(z);k++}});
+  soon.hidden=any;reset.hidden=!any;empty.hidden=n>0;
+ }
+ chips.forEach(c=>c.addEventListener('click',()=>{
+  const on=c.getAttribute('aria-pressed')==='true';
+  chips.filter(o=>o.dataset.g===c.dataset.g).forEach(o=>o.setAttribute('aria-pressed','false'));
+  c.setAttribute('aria-pressed',on?'false':'true');run();
+ }));
+ reset.addEventListener('click',()=>{chips.forEach(c=>c.setAttribute('aria-pressed','false'));run()});
  run();
 })();
 """
@@ -530,23 +558,30 @@ def build_overview():
     for i, pl in enumerate(PLANTS):
         size = SIZES[i % len(SIZES)]
         href = links.get(pl['slug'], pl['slug'] + '/')
-        facts = ''.join(f'<li>{x}</li>' for x in pl['facts'])
+        plain = pl['name'].replace('­', '')
+        needs = (f'<li>{ICON["licht"]}<span>{pl["licht_txt"]}</span></li>'
+                 f'<li>{ICON["water"]}<span>{pl["water_txt"]}</span></li>'
+                 + (f'<li class="lu">{ICON["lucht"]}<span>luchtfilter</span></li>' if pl['lucht'] else ''))
         badge = '<span class="badge">giftig sap</span>' if pl['toxic'] else ''
-        search = (pl['name'].replace('\u00ad', '') + ' ' + pl['sci'] + ' ' + ' '.join(pl['facts'])).lower()
-        tiles += (f'<a class="tile {size}" href="{href}" style="background:{pl["tint"]}" data-s="{search}" data-lucht="{1 if pl["lucht"] else 0}" aria-label="{pl["name"].replace(chr(173), "")} ({pl["sci"]}), bekijk de reel">\n'
+        tiles += (f'<a class="tile {size}" href="{href}" style="background:{pl["tint"]}" '
+                  f'data-licht="{" ".join(pl["licht"])}" data-water="{pl["water"]}" data-lucht="{"ja" if pl["lucht"] else ""}" '
+                  f'aria-label="{plain} ({pl["sci"]}): licht {pl["licht_txt"]}, water {pl["water_txt"]}{", zuivert de lucht" if pl["lucht"] else ""}. Bekijk de reel.">\n'
                   f'<span class="play" aria-hidden="true">&#9654;</span>{badge}'
                   f'<svg class="plant" viewBox="{pl["vb"]}" aria-hidden="true">{pl["art"]()}</svg>\n'
-                  f'<span class="label"><span class="sci">{pl["sci"]}</span><span class="name">{pl["name"]}</span><ul class="facts">{facts}</ul></span></a>\n')
+                  f'<span class="label"><span class="sci">{pl["sci"]}</span><span class="name">{pl["name"]}</span><ul class="needs">{needs}</ul></span></a>\n')
     tiles += '<div class="soon" id="soon">nog meer planten<br>in het schriftje…</div>\n'
+    groups = ''
+    for key, label, opts in FILTERS:
+        chips = ''.join(f'<button type="button" class="chip" data-g="{key}" data-v="{v}" aria-pressed="false">{t}</button>' for v, t in opts)
+        groups += f'<fieldset class="group"><legend>{ICON[key]}{label}</legend>{chips}</fieldset>\n'
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
     core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
-            f'<header class="top"><div><h1>Plantenfiches</h1><p class="hand">getekend in een schriftje, tot leven gebracht</p></div>\n'
-            f'<div class="tools"><label for="q" class="sr">Zoek een plant</label><input id="q" type="search" placeholder="Zoek een plant" autocomplete="off">\n'
-            f'<button class="chipbtn" id="lucht" type="button" aria-pressed="false">Luchtfilter</button></div></header>\n'
+            f'<h1>Plantenfiches</h1><p class="hand">getekend in een schriftje, tot leven gebracht</p>\n'
+            f'<div class="filters" role="group" aria-label="Kies een plant voor jouw plek">{groups}<button type="button" class="reset" id="reset" hidden>toon alle planten</button></div>\n'
             f'<div class="mosaic">{tiles}</div>\n'
-            f'<p class="empty" id="empty" hidden>Geen plant gevonden.</p>\n'
-            f'<p class="foot">Elke reel volgt alleen wat op de handgetekende fiche staat. Tik op een tegel om te kijken, en veeg in de reel naar boven voor de volgende plant.</p>\n'
+            f'<p class="empty" id="empty" hidden>Geen plant in het schriftje die hierbij past. Probeer een andere combinatie.</p>\n'
+            f'<p class="foot">Elke reel volgt alleen wat op de handgetekende fiche staat. Tik op een tegel om te kijken, veeg in de reel naar boven voor de volgende plant.</p>\n'
             f'</div>\n<script>{OV_JS}</script>\n')
     if ARTIFACT:
         path = os.path.join(OUT, 'overzicht.html'); open(path, 'w').write(core + main)
@@ -555,7 +590,9 @@ def build_overview():
         open(path, 'w').write('<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
             '<meta name="description" content="Geanimeerde plantenfiches, getekend in een schriftje en tot leven gebracht.">\n'
-            + '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Planten">\n<link rel="manifest" href="manifest.webmanifest">\n<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
+            '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n'
+            '<meta name="apple-mobile-web-app-title" content="Planten">\n<link rel="manifest" href="manifest.webmanifest">\n'
+            '<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
             + core + '</head>\n<body>\n' + main + '</body>\n</html>\n')
     print('geschreven', path)
 
