@@ -105,8 +105,7 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 .ctrl button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .ctrl button:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
 #play{min-width:96px}
-.home{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:12px;font:700 14px var(--display);color:var(--ink);text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:4px 12px;z-index:10}
-.home:focus-visible{outline:3px solid var(--purple)}
+.home{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;background:var(--ink);color:var(--desk);font:800 18px/1 var(--display);text-decoration:none;border-bottom:3px solid var(--ink)}.home .arr{font-size:22px}.home:hover{background:#2a2a2a}.home:focus-visible{outline:3px solid var(--purple);outline-offset:-6px}
 .stage{touch-action:none;user-select:none;-webkit-user-select:none}
 .hint{font:600 13px/1.3 var(--display);margin:0;text-align:center;opacity:.75}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}.scene .a,.shine{opacity:1}*{animation-delay:0s!important}}
@@ -168,9 +167,9 @@ FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B
 
 
 def page(slug, title, desc, scenes, extra_css=''):
-    css = BASE_CSS.replace('__OFF__', '134' if ARTIFACT else '174')
+    css = BASE_CSS.replace('__OFF__', '134' if ARTIFACT else '190')
     if not ARTIFACT:
-        css += 'body{padding-top:52px}'
+        css += 'body{padding-top:calc(58px + env(safe-area-inset-top,0px))}'
     body = ''.join(
         f'<section class="scene{" dk" if s.get("dark") else ""}" data-dur="{s["dur"]}" style="background:{s["bg"]}">{s["html"]}</section>\n'
         for s in scenes)
@@ -214,7 +213,7 @@ def page(slug, title, desc, scenes, extra_css=''):
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 {core}</head>
 <body>
-<a class="home" href="../" aria-label="Terug naar Planten">&larr; Planten</a>
+<a class="home" href="../"><span class="arr" aria-hidden="true">&larr;</span> Terug naar de kamer</a>
 {main}</body>
 </html>
 """

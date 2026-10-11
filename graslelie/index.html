@@ -23,7 +23,7 @@
 }
 html,body{height:100%}
 body{background:var(--desk);color:var(--ink);font-family:var(--display);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-inline:16px;padding-block:12px;box-sizing:border-box;margin:0}
-.stage{position:relative;width:min(100%,calc((100dvh - 174px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
+.stage{position:relative;width:min(100%,calc((100dvh - 190px)*9/16));aspect-ratio:9/16;max-width:100%;border:3px solid var(--ink);border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:8px 8px 0 var(--ink);cursor:pointer;container-type:inline-size}
 .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7cqw 6cqw 8cqw;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity .35s;color:var(--ink)}
 .scene.on{opacity:1;visibility:visible}
 .scene.dk{color:var(--paper)}
@@ -108,15 +108,14 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 .ctrl button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .ctrl button:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
 #play{min-width:96px}
-.home{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:12px;font:700 14px var(--display);color:var(--ink);text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:4px 12px;z-index:10}
-.home:focus-visible{outline:3px solid var(--purple)}
+.home{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;background:var(--ink);color:var(--desk);font:800 18px/1 var(--display);text-decoration:none;border-bottom:3px solid var(--ink)}.home .arr{font-size:22px}.home:hover{background:#2a2a2a}.home:focus-visible{outline:3px solid var(--purple);outline-offset:-6px}
 .stage{touch-action:none;user-select:none;-webkit-user-select:none}
 .hint{font:600 13px/1.3 var(--display);margin:0;text-align:center;opacity:.75}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}.scene .a,.shine{opacity:1}*{animation-delay:0s!important}}
-body{padding-top:52px}</style>
+body{padding-top:calc(58px + env(safe-area-inset-top,0px))}</style>
 </head>
 <body>
-<a class="home" href="../" aria-label="Terug naar Planten">&larr; Planten</a>
+<a class="home" href="../"><span class="arr" aria-hidden="true">&larr;</span> Terug naar de kamer</a>
 <div class="stage" id="stage" aria-live="polite" data-nav="{&quot;prev&quot;: &quot;../vrouwentong/&quot;, &quot;next&quot;: &quot;../rubberboom/&quot;}">
 <div class="bars" id="bars"></div>
 <section class="scene dk" data-dur="5600" style="background:#1E7A3C"><span class="tag a">Plantenfiche</span>
