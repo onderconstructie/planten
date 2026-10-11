@@ -28,7 +28,7 @@ body{background:var(--desk);color:var(--ink);font-family:var(--display);display:
 .dk .tag{background:var(--paper);color:var(--ink)}
 h2{font:800 11cqw/.95 var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;text-align:center}
 .sub{font:700 8cqw/1.05 var(--hand);text-align:center;margin:0;text-wrap:balance}
-.note{font:700 7.4cqw/1.05 var(--hand);text-align:center;margin:0}
+.note{font:700 8.8cqw/1.05 var(--hand);text-align:center;margin:0}
 .col{display:flex;flex-direction:column;gap:3cqw;align-items:center;width:100%;text-align:center}
 svg.art{width:86cqw;height:auto;overflow:visible}
 .scene .a{opacity:0}
@@ -90,10 +90,10 @@ svg.art{width:86cqw;height:auto;overflow:visible}
 .pair{display:grid;grid-template-columns:24cqw 1fr;gap:3cqw;align-items:center;width:100%}
 .pair svg{width:100%;height:auto}
 .pair b{font:800 7.4cqw/1 var(--display);color:var(--red);display:block}
-.pair span{font:700 6.2cqw/1 var(--hand)}
+.pair span{font:700 7cqw/1 var(--hand)}
 /* recap */
 .recap{display:grid;grid-template-columns:1fr 1fr;gap:2.5cqw;width:100%}
-.recap div{border-radius:14px;padding:3cqw;font:700 6cqw/1.02 var(--hand);color:var(--ink);text-align:left}
+.recap div{border-radius:14px;padding:3cqw;font:700 6.6cqw/1.02 var(--hand);color:var(--ink);text-align:left}
 .recap b{display:block;font:800 3.2cqw var(--display);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1cqw}
 /* balk + knoppen */
 .bars{position:absolute;top:2.4cqw;left:4cqw;right:4cqw;display:flex;gap:1.2cqw;z-index:5}
@@ -311,13 +311,13 @@ def build_pilea():
 <h2 class="a d3" style="color:var(--ink);font-size:10cqw">≋ licht vochtig</h2>
 <p class="note a d4" style="color:var(--blue)">in kleine hoeveelheden</p></div>'''),
       dict(dur=5600, bg='#FFE7E9', html=f'''<span class="tag a">Let op</span>
-<svg class="art" viewBox="0 0 300 200" aria-hidden="true">
-<g class="flash"><path d="M150 14L196 96H104Z" fill="#FFD60A" stroke="{INK}" stroke-width="6" stroke-linejoin="round"/><path d="M150 42v28" stroke="{INK}" stroke-width="7" stroke-linecap="round"/><circle cx="150" cy="83" r="4.5" fill="{INK}"/></g>
+<svg class="art" viewBox="0 0 300 236" aria-hidden="true">
+<g class="flash"><path d="M150 4L192 80H108Z" fill="#FFD60A" stroke="{INK}" stroke-width="6" stroke-linejoin="round"/><path d="M150 30v24" stroke="{INK}" stroke-width="7" stroke-linecap="round"/><circle cx="150" cy="67" r="4.5" fill="{INK}"/></g>
 <g transform="translate(70 120)"><rect x="-38" y="0" width="76" height="60" rx="6" fill="#E8C9A0" stroke="{INK}" stroke-width="5"/><path d="M-26 20l10 6M-6 14l8 8M14 24l12-4M-20 42l14-2M10 44l12 4" stroke="#9B7A4E" stroke-width="3" stroke-linecap="round"/>
 <path class="tick" style="--cd:1.6s" d="M-22 30l14 14 30-34" stroke="#1E7A3C" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
 <g transform="translate(230 120)"><rect x="-38" y="0" width="76" height="60" rx="6" fill="#4A3424" stroke="{INK}" stroke-width="5"/><path d="M-30 10h60" stroke="#2F6FD6" stroke-width="7"/>
 <path class="cross" style="--cd:2.2s" d="M-24 8l48 46M24 8l-48 46" stroke="#D8263A" stroke-width="9" stroke-linecap="round"/></g>
-<text x="70" y="114" text-anchor="middle" style="font:700 22px var(--hand)">te droog</text><text x="230" y="114" text-anchor="middle" style="font:700 22px var(--hand)">te nat</text></svg>
+<text x="70" y="226" text-anchor="middle" style="font:700 30px var(--hand)">te droog</text><text x="230" y="226" text-anchor="middle" style="font:700 30px var(--hand)">te nat</text></svg>
 <div class="col"><h2 class="a d2" style="font-size:13cqw">Beter te droog</h2><p class="note a d4" style="font-size:10cqw;color:var(--red)">dan te nat!</p></div>'''),
       dict(dur=5200, bg='#FFF6C2', html=light_scene('<p class="note a d5" style="font-size:9cqw">maar wel véél</p>', extra='<g class="glow"><circle cx="150" cy="120" r="112" fill="none" stroke="#F5C400" stroke-width="6" stroke-dasharray="4 14"/></g>')),
       dict(dur=7400, bg='#E6F6E3', html=f'''<span class="tag a">Stekken</span>
@@ -375,13 +375,13 @@ def build_sans():
 <span class="chip a d3">1x / 4 weken</span></div>'''),
       dict(dur=6200, bg='#FFF6C2', html=light_scene('<p class="note a d5" style="font-size:8.6cqw">van weinig tot veel</p>', half=True)),
       dict(dur=7000, bg='#E6F6E3', html=f'''<span class="tag a">Vermeerderen</span>
-<svg class="art" viewBox="0 0 300 250" aria-hidden="true">
+<svg class="art" viewBox="0 0 300 290" aria-hidden="true">
 <g class="a d1"><g transform="translate(-60 0) scale(.8)">{sans_leaf(110,250,180,-8,.2)}{sans_leaf(135,250,210,4,.3)}<path d="M80 245h90l-10 60h-70Z" fill="#FFE24A" stroke="{INK}" stroke-width="5"/></g>
 <g transform="translate(15 0) scale(.8)">{sans_leaf(120,250,190,6,.4)}<path d="M85 245h70l-8 60h-54Z" fill="#FFE24A" stroke="{INK}" stroke-width="5"/></g>
-<path class="cross" style="--cd:.8s;stroke-dasharray:6 8" d="M90 110v140" stroke="{INK}" stroke-width="4"/></g>
+<path class="cross" style="--cd:.8s;stroke-dasharray:6 8" d="M79 96v150" stroke="{INK}" stroke-width="4"/></g>
 <g class="a d4"><g transform="translate(225 110)"><path d="M-30 0h60v110h-60Z" fill="#CFE9F7" stroke="{INK}" stroke-width="5"/><path d="M-30 40h60v70h-60Z" fill="#7FC8E8" opacity=".8"/>{sans_leaf(0,80,95,0,0)}<path d="M-6 82l-6 18M0 82v20M6 82l6 18" stroke="#fff" stroke-width="2.5"/></g></g>
-<text x="80" y="245" text-anchor="middle" style="font:700 24px var(--hand)" class="a d3">scheuren</text>
-<text x="225" y="245" text-anchor="middle" style="font:700 24px var(--hand)" class="a d5">bladstek</text></svg>
+<text x="72" y="284" text-anchor="middle" style="font:700 30px var(--hand)" class="a d3">scheuren</text>
+<text x="225" y="284" text-anchor="middle" style="font:700 30px var(--hand)" class="a d5">bladstek</text></svg>
 <h2 class="a d2" style="font-size:10cqw">Scheuren<br>of bladstek</h2>'''),
       dict(dur=8800, bg='#FFFDF6', html=f'''<span class="tag a">Luchtfilter</span>
 <div class="col" style="gap:5cqw">
