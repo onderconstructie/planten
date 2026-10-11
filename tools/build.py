@@ -458,17 +458,21 @@ def ficus_plant():
             f'<path d="M88 232h124v14H88Z" fill="#FFE24A" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>')
 
 # Elke nieuwe plant: een blok hier. Alles komt van de fiche.
-# licht: welke filters bij deze plant horen ('weinig' en/of 'veel'), alleen als de fiche het zegt.
-# water: 'weinig' (zeer weinig), 'week' (1x per week) of 'ruim'.
+# spot: waar de plant in de huiskamer staat (x, y = midden onderaan de pot, s = schaal)
+# tag: waar het naamkaartje hangt (x, y linksboven) en wat erop staat (woorden van de fiche)
 PLANTS = [
   dict(slug='rubberboom', name='Rubberboom', sci='Ficus elastica', tint='#BFE6C6', art=ficus_plant, vb='30 -10 240 345',
-       licht=[], licht_txt='indirect', water='week', water_txt='1x / week', lucht=True, toxic=True),
+       licht_txt='indirect', water_txt='1x / week', lucht=True, toxic=True,
+       spot=(705, 640, .78), tag=(640, 262), tagtxt='indirect, uit de tocht'),
   dict(slug='pannenkoekenplant', name='Pannenkoeken­plant', sci='Pilea peperomioides', tint='#CFEFF0', art=lambda: pilea_plant(), vb='10 15 280 320',
-       licht=['veel'], licht_txt='indirect, veel', water='week', water_txt='1x / week', lucht=False, toxic=False),
+       licht_txt='indirect, veel', water_txt='1x / week', lucht=False, toxic=False,
+       spot=(530, 404, .42), tag=(292, 6), tagtxt='indirect, maar wel veel'),
   dict(slug='vrouwentong', name='Vrouwentong', sci='Sansevieria', tint='#FFF1A8', art=sans_plant, vb='40 -20 220 360',
-       licht=['weinig', 'veel'], licht_txt='weinig tot veel', water='weinig', water_txt='1x / 4 weken', lucht=True, toxic=False),
+       licht_txt='weinig tot veel', water_txt='1x / 4 weken', lucht=True, toxic=False,
+       spot=(1128, 650, .62), tag=(958, 312), tagtxt='weinig licht? oké'),
   dict(slug='graslelie', name='Graslelie', sci='Chlorophytum comosum', tint='#DCE6FF', art=lambda: chloro_plant(), vb='20 20 280 310',
-       licht=['weinig', 'veel'], licht_txt='veel of weinig', water='ruim', water_txt='ruim', lucht=True, toxic=False),
+       licht_txt='veel of weinig', water_txt='ruim', lucht=True, toxic=False,
+       spot=(955, 262, .5), tag=(640, 126), tagtxt='veel of weinig licht', hang=True),
 ]
 
 ICON = {
@@ -477,35 +481,104 @@ ICON = {
   'lucht': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h8" fill="none" stroke="#141414" stroke-width="2.2" stroke-linecap="round"/></svg>',
 }
 
-FILTERS = [
-  ('licht', 'Licht', [('weinig', 'weinig'), ('veel', 'veel')]),
-  ('water', 'Water', [('weinig', 'zeer weinig'), ('week', '1x / week'), ('ruim', 'ruim')]),
-  ('lucht', 'Luchtfilter', [('ja', 'ja')]),
-]
+def room_svg(links):
+    I = INK
+    planks = ''.join(f'<path d="M0 {y}H1200" stroke="#B9814F" stroke-width="3"/>' for y in (600, 645))
+    planks += ''.join(f'<path d="M{x} {y1}v{45}" stroke="#B9814F" stroke-width="3"/>' for x, y1 in [(140,560),(420,560),(760,560),(1010,560),(260,600),(600,600),(900,600),(80,645),(470,645),(830,645),(1110,645)])
+    dots = ''.join(f'<circle cx="{x}" cy="{y}" r="3" fill="#F0DFA8"/>' for y in range(40, 540, 60) for x in range(30 + (y // 60 % 2) * 30, 1200, 60))
+    base = f'''<rect width="1200" height="700" fill="#FFF8E1"/>{dots}
+<path d="M1040 0H1200V560H1040Z" fill="{I}" opacity=".13"/>
+<path d="M1040 0V560" stroke="{I}" stroke-width="2" stroke-dasharray="6 10" opacity=".35"/>
+<rect y="560" width="1200" height="140" fill="#E2B07A"/>{planks}
+<path d="M1040 560L1200 560V700H980Z" fill="{I}" opacity=".13"/>
+<path d="M0 560H1200" stroke="{I}" stroke-width="6"/>
+<!-- raam met vitrage -->
+<path d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/>
+<rect x="306" y="96" width="288" height="304" fill="#BFE3FF" stroke="{I}" stroke-width="7"/>
+<circle cx="540" cy="150" r="34" fill="#F5C400" stroke="{I}" stroke-width="5"/>
+<path d="M450 96V400M306 248H594" stroke="{I}" stroke-width="6"/>
+<g opacity=".55">{''.join(f'<path d="M{x} 100V396" stroke="#fff" stroke-width="9"/>' for x in range(318, 594, 22))}</g>
+<path d="M292 400H608V418H292Z" fill="#fff" stroke="{I}" stroke-width="5"/>
+<path d="M282 82H618" stroke="{I}" stroke-width="7" stroke-linecap="round"/>
+<path d="M286 86c18 120-8 230 12 330h-30c-10-110 8-220 2-330Z" fill="#F59AA5" stroke="{I}" stroke-width="5" stroke-linejoin="round"/>
+<path d="M614 86c-18 120 8 230-12 330h30c10-110-8-220-2-330Z" fill="#F59AA5" stroke="{I}" stroke-width="5" stroke-linejoin="round"/>
+<!-- deur met tocht -->
+<rect x="52" y="172" width="150" height="388" fill="#C98B5E" stroke="{I}" stroke-width="7"/>
+<rect x="76" y="200" width="102" height="140" rx="6" fill="none" stroke="{I}" stroke-width="4"/>
+<rect x="76" y="370" width="102" height="160" rx="6" fill="none" stroke="{I}" stroke-width="4"/>
+<circle cx="184" cy="372" r="8" fill="#F5C400" stroke="{I}" stroke-width="4"/>
+<g stroke="#2F6FD6" stroke-width="6" fill="none" stroke-linecap="round">
+<path class="gust" d="M210 470q40-14 80 0t70-6"/><path class="gust" d="M210 505q46-10 92 0t76 4"/><path class="gust" d="M210 540q40 8 80 0t66 8"/></g>
+<text x="232" y="452" class="lbl" fill="#2F6FD6">tocht</text>
+<!-- zetel -->
+<path d="M760 452h300v108H760Z" fill="#7FA4E6" stroke="{I}" stroke-width="6" stroke-linejoin="round"/>
+<path d="M776 400h268v60H776Z" fill="#9BB9EE" stroke="{I}" stroke-width="6" stroke-linejoin="round"/>
+<path d="M742 430h44v130h-44ZM1034 430h44v130h-44Z" fill="#7FA4E6" stroke="{I}" stroke-width="6" stroke-linejoin="round"/>
+<path d="M770 560v22M1050 560v22" stroke="{I}" stroke-width="8" stroke-linecap="round"/>
+<!-- donkere hoek -->
+<text x="1050" y="46" class="lbl" fill="{I}" opacity=".7" style="font-size:28px">donkere hoek</text>
+<text x="440" y="540" class="lbl" fill="#9A7400">licht</text>
+<!-- vrij plekje op de vensterbank -->
+<g class="free"><path d="M352 404h44l-6 -30h-32Z" fill="none" stroke="{I}" stroke-width="4" stroke-dasharray="6 6" stroke-linejoin="round"/>
+<text x="374" y="368" text-anchor="middle" class="lbl" style="font-size:30px">?</text></g>'''
+    plants, tags = '', ''
+    for pl in PLANTS:
+        x, y, s = pl['spot']
+        href = links.get(pl['slug'], pl['slug'] + '/')
+        plain = pl['name'].replace('­', '')
+        hang = ''
+        if pl.get('hang'):
+            hang = f'<path d="M{x} 0V{y-330*s:.0f}M{x} {y-330*s:.0f}L{x-48*s:.0f} {y-150*s:.0f}M{x} {y-330*s:.0f}L{x+48*s:.0f} {y-150*s:.0f}" stroke="{I}" stroke-width="3" fill="none"/>'
+        tx, ty = pl['tag']
+        w = max(232, round(len(plain) * 12.5 + 64))
+        # stippellijn van kaartje naar plant
+        ax, ay = tx + w / 2, ty + 72
+        px, py = x, y - 260 * s
+        plants += (f'<a class="pl" href="{href}" aria-label="{plain}: {pl["tagtxt"]}. Bekijk de reel.">'
+                   f'{hang}<g class="lift"><g transform="translate({x-150*s:.1f} {y-325*s:.1f}) scale({s})">{pl["art"]()}</g></g>'
+                   f'<path d="M{ax:.0f} {ay:.0f}Q{(ax+px)/2+30:.0f} {(ay+py)/2:.0f} {px:.0f} {py:.0f}" class="lead"/>'
+                   f'<g class="tag"><rect x="{tx}" y="{ty}" width="{w}" height="70" rx="12"/>'
+                   f'<text x="{tx+14}" y="{ty+31}" class="tn">{plain}</text>'
+                   f'<text x="{tx+14}" y="{ty+58}" class="tt">{pl["tagtxt"]}</text>'
+                   f'<circle cx="{tx+w-20}" cy="{ty+22}" r="12" class="pb"/><path d="M{tx+w-24} {ty+16}l10 6-10 6Z" class="pt"/></g></a>')
+    return f'<svg class="room" viewBox="0 0 1200 700" role="group" aria-label="Huiskamer met de planten op hun plek">{base}{plants}</svg>'
 
 OV_CSS = r"""
 :root{--desk:#FFD60A;--ink:#141414;--paper:#FFFDF6;--leaf:#2E9E4F;--red:#D8263A;--purple:#5B2A9E;
 --display:"Bricolage Grotesque",system-ui,sans-serif;--hand:"Caveat","Comic Sans MS",cursive;color-scheme:light}
 body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)}
 [hidden]{display:none!important}
-.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
 h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
-.hand{font:700 clamp(26px,5.4vw,36px)/1 var(--hand);margin:8px 0 22px}
-.filters{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-bottom:24px}
-.group{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:0;margin:0;padding:0;min-width:0}
-.group legend{float:left;display:flex;align-items:center;gap:6px;font:700 26px/1 var(--hand);margin-right:4px;padding:0}
-.group legend svg{width:24px;height:24px}
-.chip{font:800 14px var(--display);border:3px solid var(--ink);border-radius:99px;padding:7px 13px;background:var(--paper);color:var(--ink);box-shadow:3px 3px 0 var(--ink);cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
-.chip:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.reset{font:700 24px var(--hand);background:none;border:0;color:var(--ink);text-decoration:underline;cursor:pointer;padding:0}
-.chip:focus-visible,.tile:focus-visible,.reset:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+.hand{font:700 clamp(26px,5.4vw,36px)/1 var(--hand);margin:8px 0 20px}
+.roomwrap{border:3px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);overflow-x:auto;overflow-y:hidden;background:#FFF8E1;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+svg.room{display:block;height:clamp(380px,68vh,600px);width:auto;max-width:none}
+@media (min-width:900px){svg.room{width:100%;height:auto}}
+.swipe{font:700 24px var(--hand);margin:10px 0 0;text-align:center}
+@media (min-width:900px){.swipe{display:none}}
+svg.room .lbl{font:700 34px var(--hand)}
+svg.room .gust{stroke-dasharray:120;stroke-dashoffset:120;animation:gust 1.6s ease-out infinite}
+svg.room .gust:nth-of-type(2){animation-delay:.5s}svg.room .gust:nth-of-type(3){animation-delay:1s}
+@keyframes gust{0%{stroke-dashoffset:120;opacity:1}100%{stroke-dashoffset:-120;opacity:0}}
+.pl{cursor:pointer;outline:none}
+.pl .lift{transition:transform .25s}
+.pl:hover .lift,.pl:focus-visible .lift{transform:translateY(-8px)}
+.pl .lead{fill:none;stroke:var(--ink);stroke-width:3;stroke-dasharray:4 9;stroke-linecap:round}
+.pl .tag rect{fill:var(--paper);stroke:var(--ink);stroke-width:4;filter:drop-shadow(5px 5px 0 var(--ink))}
+.pl:hover .tag rect,.pl:focus-visible .tag rect{fill:var(--ink)}
+.pl:hover .tn,.pl:focus-visible .tn{fill:var(--desk)}
+.pl:hover .tt,.pl:focus-visible .tt{fill:var(--paper)}
+.pl:focus-visible .tag rect{stroke:var(--purple);stroke-width:6}
+.tn{font:800 22px var(--display);fill:var(--ink);letter-spacing:-.01em}
+.tt{font:700 25px var(--hand);fill:var(--leaf)}
+.pb{fill:var(--ink)}.pt{fill:var(--desk)}
+.pl:hover .pb,.pl:focus-visible .pb{fill:var(--desk)}.pl:hover .pt,.pl:focus-visible .pt{fill:var(--ink)}
+h2.all{font:800 clamp(28px,6vw,44px)/1 var(--display);letter-spacing:-.03em;margin:44px 0 16px}
 .mosaic{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:200px;grid-auto-flow:dense;gap:16px}
 .tile{container-type:inline-size;position:relative;display:flex;flex-direction:column;text-decoration:none;color:var(--ink);border:3px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;transition:transform .2s,box-shadow .2s;min-width:0}
 .tile:hover{transform:translate(-2px,-3px);box-shadow:8px 9px 0 var(--ink)}
-.tile.big{grid-column:span 2;grid-row:span 2}
-.tile.tall{grid-row:span 2}
-.tile.wide{grid-column:span 2}
+.tile:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+.tile.big{grid-column:span 2;grid-row:span 2}.tile.tall{grid-row:span 2}.tile.wide{grid-column:span 2}
 .tile svg.plant{flex:1;min-height:0;width:100%;padding:8px;box-sizing:border-box}
 .label{background:var(--paper);border-top:3px solid var(--ink);padding:8px 12px 10px;display:flex;flex-direction:column;gap:3px}
 .sci{font:700 19px/1 var(--hand);color:var(--leaf);overflow-wrap:break-word}
@@ -518,38 +591,22 @@ h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;marg
 .badge{position:absolute;top:10px;right:10px;font:800 10px var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:var(--paper);border-radius:99px;padding:4px 8px;z-index:1}
 .play{position:absolute;top:10px;left:10px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--desk);display:grid;place-items:center;font-size:11px;z-index:1}
 .soon{border:3px dashed var(--ink);border-radius:18px;display:grid;place-items:center;text-align:center;padding:14px;font:700 28px/1 var(--hand)}
-.empty{font:700 30px var(--hand);text-align:center;padding:30px 0}
 .foot{margin-top:40px;font:700 22px/1.2 var(--hand);max-width:52ch}
-@media (max-width:520px){.filters{gap:10px}.chip{padding:6px 11px;font-size:13px}.group legend{font-size:24px}.mosaic{grid-auto-rows:215px}}
+@media (max-width:520px){.mosaic{grid-auto-rows:215px}}
 @media (max-width:360px){.mosaic{grid-template-columns:1fr}.tile.big,.tile.wide{grid-column:span 1}}
-@media (prefers-reduced-motion:reduce){.tile{transition:none}}
+@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}svg.room .gust{animation:none;stroke-dashoffset:0}}
 """
 
 OV_JS = r"""
 (function(){
- const chips=[...document.querySelectorAll('.chip')],tiles=[...document.querySelectorAll('.tile')];
- const soon=document.getElementById('soon'),empty=document.getElementById('empty'),reset=document.getElementById('reset');
- function run(){
-  const act={};chips.forEach(c=>{if(c.getAttribute('aria-pressed')==='true')act[c.dataset.g]=c.dataset.v});
-  const any=Object.keys(act).length>0;let n=0;
-  tiles.forEach(t=>{const ok=Object.entries(act).every(([g,v])=>(' '+t.dataset[g]+' ').includes(' '+v+' '));t.hidden=!ok;if(ok)n++});
-  const SZ=['big','tall','','wide',''];let k=0;
-  tiles.forEach(t=>{t.classList.remove('big','tall','wide');if(!t.hidden){const z=SZ[k%SZ.length];if(z)t.classList.add(z);k++}});
-  soon.hidden=any;reset.hidden=!any;empty.hidden=n>0;
- }
- chips.forEach(c=>c.addEventListener('click',()=>{
-  const on=c.getAttribute('aria-pressed')==='true';
-  chips.filter(o=>o.dataset.g===c.dataset.g).forEach(o=>o.setAttribute('aria-pressed','false'));
-  c.setAttribute('aria-pressed',on?'false':'true');run();
- }));
- reset.addEventListener('click',()=>{chips.forEach(c=>c.setAttribute('aria-pressed','false'));run()});
- run();
+ // start de kamer op gsm bij het raam, zodat je meteen planten ziet
+ const w=document.querySelector('.roomwrap');
+ try{ if(w.scrollWidth>w.clientWidth) w.scrollLeft=(w.scrollWidth-w.clientWidth)*0.28; }catch(e){}
 })();
 """
 
 ARTIFACT_LINKS = {'rubberboom':'https://claude.ai/artifact/Pe65DNa14PMjNJazRRsmVY','pannenkoekenplant':'https://claude.ai/artifact/Q1NQFtvBS527ePdVp2beuH','vrouwentong':'https://claude.ai/artifact/G4852WAcyFnP8FvMYAvd7M','graslelie':'https://claude.ai/artifact/5iLZijme21bXEyhVhve6cn'}
 
-# Tegelmaten herhalen zich per vijf planten; grid-auto-flow:dense vult de gaten.
 SIZES = ['big', 'tall', '', 'wide', '']
 
 def build_overview():
@@ -561,27 +618,22 @@ def build_overview():
         plain = pl['name'].replace('­', '')
         needs = (f'<li>{ICON["licht"]}<span>{pl["licht_txt"]}</span></li>'
                  f'<li>{ICON["water"]}<span>{pl["water_txt"]}</span></li>'
-                 + (f'<li class="lu">{ICON["lucht"]}<span>luchtfilter</span></li>' if pl['lucht'] else ''))
+                 + (f'<li>{ICON["lucht"]}<span>luchtfilter</span></li>' if pl['lucht'] else ''))
         badge = '<span class="badge">giftig sap</span>' if pl['toxic'] else ''
-        tiles += (f'<a class="tile {size}" href="{href}" style="background:{pl["tint"]}" '
-                  f'data-licht="{" ".join(pl["licht"])}" data-water="{pl["water"]}" data-lucht="{"ja" if pl["lucht"] else ""}" '
-                  f'aria-label="{plain} ({pl["sci"]}): licht {pl["licht_txt"]}, water {pl["water_txt"]}{", zuivert de lucht" if pl["lucht"] else ""}. Bekijk de reel.">\n'
+        tiles += (f'<a class="tile {size}" href="{href}" style="background:{pl["tint"]}" aria-label="{plain} ({pl["sci"]}). Bekijk de reel.">\n'
                   f'<span class="play" aria-hidden="true">&#9654;</span>{badge}'
                   f'<svg class="plant" viewBox="{pl["vb"]}" aria-hidden="true">{pl["art"]()}</svg>\n'
                   f'<span class="label"><span class="sci">{pl["sci"]}</span><span class="name">{pl["name"]}</span><ul class="needs">{needs}</ul></span></a>\n')
-    tiles += '<div class="soon" id="soon">nog meer planten<br>in het schriftje…</div>\n'
-    groups = ''
-    for key, label, opts in FILTERS:
-        chips = ''.join(f'<button type="button" class="chip" data-g="{key}" data-v="{v}" aria-pressed="false">{t}</button>' for v, t in opts)
-        groups += f'<fieldset class="group"><legend>{ICON[key]}{label}</legend>{chips}</fieldset>\n'
+    tiles += '<div class="soon">nog meer planten<br>in het schriftje…</div>\n'
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
     core = f'<title>Plantenfiches</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
-            f'<h1>Plantenfiches</h1><p class="hand">getekend in een schriftje, tot leven gebracht</p>\n'
-            f'<div class="filters" role="group" aria-label="Kies een plant voor jouw plek">{groups}<button type="button" class="reset" id="reset" hidden>toon alle planten</button></div>\n'
+            f'<h1>Plantenfiches</h1><p class="hand">welke plant past waar? tik op een plant</p>\n'
+            f'<div class="roomwrap">{room_svg(links)}</div>\n'
+            f'<p class="swipe">veeg ← → door de kamer</p>\n'
+            f'<h2 class="all">Alle fiches</h2>\n'
             f'<div class="mosaic">{tiles}</div>\n'
-            f'<p class="empty" id="empty" hidden>Geen plant in het schriftje die hierbij past. Probeer een andere combinatie.</p>\n'
-            f'<p class="foot">Elke reel volgt alleen wat op de handgetekende fiche staat. Tik op een tegel om te kijken, veeg in de reel naar boven voor de volgende plant.</p>\n'
+            f'<p class="foot">Elke plant staat waar haar handgetekende fiche het toelaat, en elke reel volgt alleen wat op die fiche staat.</p>\n'
             f'</div>\n<script>{OV_JS}</script>\n')
     if ARTIFACT:
         path = os.path.join(OUT, 'overzicht.html'); open(path, 'w').write(core + main)
@@ -589,7 +641,7 @@ def build_overview():
         path = os.path.join(OUT, 'index.html')
         open(path, 'w').write('<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n'
-            '<meta name="description" content="Geanimeerde plantenfiches, getekend in een schriftje en tot leven gebracht.">\n'
+            '<meta name="description" content="Welke plant past waar in je huiskamer? Geanimeerde plantenfiches, getekend in een schriftje.">\n'
             '<meta name="theme-color" content="#FFD60A">\n<meta name="apple-mobile-web-app-capable" content="yes">\n'
             '<meta name="apple-mobile-web-app-title" content="Planten">\n<link rel="manifest" href="manifest.webmanifest">\n'
             '<link rel="icon" href="icons/icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n'
