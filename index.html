@@ -47,6 +47,28 @@ svg.room .gust:nth-of-type(2){animation-delay:.5s}svg.room .gust:nth-of-type(3){
 svg.room .swing{transform-box:view-box;transform-origin:690px 0;animation:swing 7s ease-in-out infinite}
 @keyframes swing{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
 svg.room .beam{animation:beam 6s ease-in-out infinite}
+svg.room .beamwrap,svg.room .sky,svg.room .nightveil,svg.room .lampglow,svg.room .stars,svg.room .moon,svg.room .clouds,svg.room .rain{transition:opacity 2.5s ease,fill 2.5s ease}
+svg.room .door{cursor:pointer;outline:none}
+svg.room .door .leaf{transform-box:view-box;transform-origin:52px 400px;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+svg.room .door.open .leaf{transform:scaleX(.18) skewY(4deg)}
+svg.room .door:hover .knob{fill:#FFE38A}
+svg.room .door:focus-visible .leaf path:first-child{stroke:var(--purple);stroke-width:9}
+svg.room .knob{animation:knob 3.2s ease-in-out infinite}
+@keyframes knob{0%,80%,100%{transform:none}86%{transform:translateX(-2px)}92%{transform:translateX(2px)}}
+svg.room .knob{transform-box:fill-box;transform-origin:center}
+svg.room .rain path{animation:rain .7s linear infinite}
+svg.room .rain path:nth-child(3n){animation-delay:-.25s}svg.room .rain path:nth-child(3n+1){animation-delay:-.5s}
+@keyframes rain{from{transform:translate(0,-60px)}to{transform:translate(-16px,60px)}}
+svg.room .cat{--cat:#E39B5B;--spot:#F2C08F;pointer-events:none}
+svg.room .cat .legs path{transform-box:fill-box;transform-origin:50% 0}
+svg.room .cat.walking .lg1{animation:leg .36s ease-in-out infinite alternate}
+svg.room .cat.walking .lg2{animation:leg .36s ease-in-out infinite alternate-reverse}
+@keyframes leg{from{transform:rotate(-22deg)}to{transform:rotate(22deg)}}
+svg.room .cat .tail2{transform-box:fill-box;transform-origin:0 100%;animation:tailx 3s ease-in-out infinite}
+@keyframes tailx{0%,100%{transform:rotate(0)}50%{transform:rotate(14deg)}}
+svg.room .cat .zzz{animation:zzz 3.6s ease-in-out infinite}
+@keyframes zzz{0%{opacity:0;transform:translate(0,6px)}30%,70%{opacity:1}100%{opacity:0;transform:translate(10px,-14px)}}
+.minisvg .cat,.minisvg .bus{display:none}
 @keyframes beam{0%,100%{opacity:.36}50%{opacity:.52}}
 .minisvg .sway,.minisvg .swing,.minisvg .beam,.minisvg .enter,.minisvg .lift{animation:none!important}
 .pl .hit{fill:transparent}
@@ -112,7 +134,7 @@ h2.all{font:800 clamp(28px,6vw,44px)/1 var(--display);letter-spacing:-.03em;marg
 .foot{margin-top:40px;font:700 22px/1.2 var(--hand);max-width:52ch}
 @media (max-width:520px){.mosaic{grid-auto-rows:215px}}
 @media (max-width:360px){.mosaic{grid-template-columns:1fr}.tile.big,.tile.wide{grid-column:span 1}}
-@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}.pl .enter,.pl .sway,.pl.ghost .lift,svg.room .swing,svg.room .beam{animation:none}svg.room .gust{animation:none;stroke-dashoffset:0}.mini .hand{animation:none}}
+@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}.pl .enter,.pl .sway,.pl.ghost .lift,svg.room .swing,svg.room .beam,svg.room .rain path,svg.room .knob,svg.room .cat *{animation:none}svg.room .gust{animation:none;stroke-dashoffset:0}.mini .hand{animation:none}}
 </style>
 <style id="smooth">/* Gedeelde afwerking voor de hele app: overgangen, korrel, soepele knoppen. */
 
@@ -142,6 +164,8 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <!-- geschilderde boog achter de zetel -->
 <path d="M742 560V330A150 150 0 0 1 1042 330V560Z" fill="#E9A27F"/>
 <!-- papieren hanglamp -->
+<circle class="lampglow" cx="690" cy="148" r="150" fill="url(#glow)" opacity="0"/>
+<radialGradient id="glow"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".9"/><stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/></radialGradient>
 <g class="swing"><path d="M690 0V108" stroke="#141414" stroke-width="3"/>
 <circle cx="690" cy="148" r="40" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
 <path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/></g>
@@ -160,18 +184,34 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <path d="M1040 560L1200 560V700H980Z" fill="#141414" opacity=".13"/>
 <path d="M0 560H1200" stroke="#141414" stroke-width="6"/>
 <!-- boograam met vitrage -->
-<path class="beam" d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/>
+<g class="beamwrap"><path class="beam" d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/></g>
 <clipPath id="win"><path d="M306 400V240A144 144 0 0 1 594 240V400Z"/></clipPath>
-<path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="#BFE3FF"/>
-<g clip-path="url(#win)"><circle cx="520" cy="172" r="28" fill="#F5C400" stroke="#141414" stroke-width="5"/>
+<path class="sky" d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="#BFE3FF"/>
+<g clip-path="url(#win)">
+<g class="stars" opacity="0"><circle cx="340" cy="150" r="2.4" fill="#FFFDF6"/><circle cx="372" cy="210" r="2.4" fill="#FFFDF6"/><circle cx="410" cy="128" r="2.4" fill="#FFFDF6"/><circle cx="488" cy="186" r="2.4" fill="#FFFDF6"/><circle cx="560" cy="232" r="2.4" fill="#FFFDF6"/><circle cx="338" cy="262" r="2.4" fill="#FFFDF6"/><circle cx="420" cy="250" r="2.4" fill="#FFFDF6"/><circle cx="574" cy="150" r="2.4" fill="#FFFDF6"/><circle cx="462" cy="112" r="2.4" fill="#FFFDF6"/></g>
+<g class="moon" opacity="0"><circle cx="0" cy="0" r="24" fill="#FFF3C4" stroke="#141414" stroke-width="5"/><circle cx="-7" cy="-5" r="5" fill="#E9DDA8"/><circle cx="8" cy="8" r="3.5" fill="#E9DDA8"/></g>
+<g class="sun"><circle cx="0" cy="0" r="28" fill="#F5C400" stroke="#141414" stroke-width="5"/></g>
+<g class="clouds" opacity="0"><path d="M318 190c0-20 26-30 40-16 8-22 46-22 54 2 22-4 34 22 16 32h-98c-14-2-18-12-12-18Z" fill="#C9CED6" stroke="#141414" stroke-width="5"/>
+<path d="M440 150c0-22 30-32 44-14 10-24 52-22 58 4 24-2 34 26 14 36h-104c-16-2-20-14-12-26Z" fill="#B7BDC7" stroke="#141414" stroke-width="5"/>
+<path d="M500 236c0-16 22-24 34-12 8-18 40-16 44 4 18 0 26 20 10 28h-80c-12-2-14-12-8-20Z" fill="#C9CED6" stroke="#141414" stroke-width="5"/></g>
+<path class="street" d="M306 382H594" stroke="#9AA3AD" stroke-width="10"/>
+<g class="bus" transform="translate(-260 0)"><rect x="0" y="318" width="210" height="58" rx="12" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
+<rect x="0" y="352" width="210" height="10" fill="#FFD60A"/>
+<g fill="#9FD3F0" stroke="#141414" stroke-width="3"><rect x="12" y="326" width="28" height="20" rx="4"/><rect x="48" y="326" width="28" height="20" rx="4"/><rect x="84" y="326" width="28" height="20" rx="4"/><rect x="120" y="326" width="28" height="20" rx="4"/><rect x="156" y="326" width="28" height="20" rx="4"/></g>
+<rect x="186" y="326" width="18" height="30" rx="4" fill="#9FD3F0" stroke="#141414" stroke-width="3"/>
+<circle cx="44" cy="378" r="11" fill="#141414"/><circle cx="168" cy="378" r="11" fill="#141414"/></g>
+<g class="rain" opacity="0"><path d="M330 110l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M370 160l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M410 100l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M450 180l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M490 120l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M530 170l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M570 110l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M350 240l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M395 290l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M440 250l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M485 300l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M525 240l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M565 290l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M340 330l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M420 340l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M500 330l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M580 340l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M460 140l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M380 60l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M540 70l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/></g>
 <g opacity=".5"><path d="M316 90V400" stroke="#fff" stroke-width="9"/><path d="M338 90V400" stroke="#fff" stroke-width="9"/><path d="M360 90V400" stroke="#fff" stroke-width="9"/><path d="M382 90V400" stroke="#fff" stroke-width="9"/><path d="M404 90V400" stroke="#fff" stroke-width="9"/><path d="M426 90V400" stroke="#fff" stroke-width="9"/><path d="M448 90V400" stroke="#fff" stroke-width="9"/><path d="M470 90V400" stroke="#fff" stroke-width="9"/><path d="M492 90V400" stroke="#fff" stroke-width="9"/><path d="M514 90V400" stroke="#fff" stroke-width="9"/><path d="M536 90V400" stroke="#fff" stroke-width="9"/><path d="M558 90V400" stroke="#fff" stroke-width="9"/><path d="M580 90V400" stroke="#fff" stroke-width="9"/></g></g>
 <path d="M450 96V400M306 300H594" stroke="#141414" stroke-width="6"/>
 <path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="none" stroke="#141414" stroke-width="8" stroke-linejoin="round"/>
 <path d="M292 400H608V418H292Z" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
 <!-- boogdeur met tocht -->
-<path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#3E6B57" stroke="#141414" stroke-width="7" stroke-linejoin="round"/>
+<path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#2A2622" stroke="#141414" stroke-width="7" stroke-linejoin="round"/>
+<path d="M60 560L194 560L180 520H74Z" fill="#3A332D"/>
+<g class="door" role="button" tabindex="0" aria-label="Open de deur"><title>Open de deur</title>
+<g class="leaf"><path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#3E6B57" stroke="#141414" stroke-width="7" stroke-linejoin="round"/>
 <path d="M78 534V256A49 49 0 0 1 176 256V534Z" fill="none" stroke="#2C5242" stroke-width="5"/>
-<circle cx="186" cy="384" r="9" fill="#F5C400" stroke="#141414" stroke-width="4"/>
+<circle class="knob" cx="186" cy="384" r="9" fill="#F5C400" stroke="#141414" stroke-width="4"/></g></g>
 <g stroke="#2F6FD6" stroke-width="6" fill="none" stroke-linecap="round">
 <path class="gust" d="M210 470q40-14 80 0t70-6"/><path class="gust" d="M210 505q46-10 92 0t76 4"/><path class="gust" d="M210 540q40 8 80 0t66 8"/></g>
 <text x="232" y="452" class="lbl" fill="#2F6FD6">tocht</text>
@@ -184,6 +224,22 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <circle cx="822" cy="440" r="26" fill="#9BB9EE" stroke="#141414" stroke-width="5"/>
 <rect x="972" y="414" width="52" height="52" rx="12" fill="#E39B7B" stroke="#141414" stroke-width="5" transform="rotate(8 998 440)"/>
 <path d="M784 556l-6 22M1036 556l6 22" stroke="#8C5A3A" stroke-width="9" stroke-linecap="round"/>
+<!-- kat -->
+<g class="cat" opacity="0" transform="translate(127 596)">
+<g class="walk"><path class="tail" d="M-34 -30q-26-6-30-32" fill="none" stroke="var(--cat)" stroke-width="9" stroke-linecap="round"/>
+<g class="legs" stroke="var(--cat)" stroke-width="8" stroke-linecap="round"><path class="lg1" d="M-22 -14v14"/><path class="lg2" d="M-10 -14v14"/><path class="lg1" d="M14 -14v14"/><path class="lg2" d="M24 -14v14"/></g>
+<ellipse cx="0" cy="-26" rx="38" ry="18" fill="var(--cat)" stroke="#141414" stroke-width="4"/>
+<ellipse class="spot" cx="-6" cy="-30" rx="14" ry="9" fill="var(--spot)"/>
+<g transform="translate(38 -44)"><path d="M-14 -10l2-16 10 9ZM14 -10l-2-16-10 9Z" fill="var(--cat)" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle r="17" fill="var(--cat)" stroke="#141414" stroke-width="4"/><circle cx="-6" cy="-2" r="2.6" fill="#141414"/><circle cx="7" cy="-2" r="2.6" fill="#141414"/><path d="M-1 5l1 2 1-2" stroke="#141414" stroke-width="2" fill="none"/></g></g>
+<g class="lie" opacity="0"><path class="tail2" d="M30 -6q24 4 14-20" fill="none" stroke="var(--cat)" stroke-width="9" stroke-linecap="round"/>
+<path d="M-40 0c0-26 22-38 44-38s40 14 40 38Z" fill="var(--cat)" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<ellipse class="spot" cx="4" cy="-22" rx="14" ry="8" fill="var(--spot)"/>
+<g transform="translate(-36 -14)"><path d="M-13 -8l3-14 9 8ZM13 -8l-3-14-9 8Z" fill="var(--cat)" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle r="15" fill="var(--cat)" stroke="#141414" stroke-width="4"/><path d="M-8 0q3 3 6 0M2 0q3 3 6 0" stroke="#141414" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>
+<text class="zzz" x="-30" y="-44" style="font:700 26px var(--hand)" fill="#141414">z z</text></g>
+</g>
+<rect class="nightveil" width="1200" height="700" fill="#1F2A4D" opacity="0" style="mix-blend-mode:multiply;pointer-events:none"/>
 <!-- labels -->
 <text x="1050" y="46" class="lbl" fill="#141414" opacity=".7" style="font-size:28px">donkere hoek</text>
 <text x="548" y="606" class="lbl" fill="#9A7400">licht</text>
@@ -202,6 +258,8 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <!-- geschilderde boog achter de zetel -->
 <path d="M742 560V330A150 150 0 0 1 1042 330V560Z" fill="#E9A27F"/>
 <!-- papieren hanglamp -->
+<circle class="lampglow" cx="690" cy="148" r="150" fill="url(#glow)" opacity="0"/>
+<radialGradient id="glow"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".9"/><stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/></radialGradient>
 <g class="swing"><path d="M690 0V108" stroke="#141414" stroke-width="3"/>
 <circle cx="690" cy="148" r="40" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
 <path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/></g>
@@ -220,18 +278,34 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <path d="M1040 560L1200 560V700H980Z" fill="#141414" opacity=".13"/>
 <path d="M0 560H1200" stroke="#141414" stroke-width="6"/>
 <!-- boograam met vitrage -->
-<path class="beam" d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/>
+<g class="beamwrap"><path class="beam" d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/></g>
 <clipPath id="win"><path d="M306 400V240A144 144 0 0 1 594 240V400Z"/></clipPath>
-<path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="#BFE3FF"/>
-<g clip-path="url(#win)"><circle cx="520" cy="172" r="28" fill="#F5C400" stroke="#141414" stroke-width="5"/>
+<path class="sky" d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="#BFE3FF"/>
+<g clip-path="url(#win)">
+<g class="stars" opacity="0"><circle cx="340" cy="150" r="2.4" fill="#FFFDF6"/><circle cx="372" cy="210" r="2.4" fill="#FFFDF6"/><circle cx="410" cy="128" r="2.4" fill="#FFFDF6"/><circle cx="488" cy="186" r="2.4" fill="#FFFDF6"/><circle cx="560" cy="232" r="2.4" fill="#FFFDF6"/><circle cx="338" cy="262" r="2.4" fill="#FFFDF6"/><circle cx="420" cy="250" r="2.4" fill="#FFFDF6"/><circle cx="574" cy="150" r="2.4" fill="#FFFDF6"/><circle cx="462" cy="112" r="2.4" fill="#FFFDF6"/></g>
+<g class="moon" opacity="0"><circle cx="0" cy="0" r="24" fill="#FFF3C4" stroke="#141414" stroke-width="5"/><circle cx="-7" cy="-5" r="5" fill="#E9DDA8"/><circle cx="8" cy="8" r="3.5" fill="#E9DDA8"/></g>
+<g class="sun"><circle cx="0" cy="0" r="28" fill="#F5C400" stroke="#141414" stroke-width="5"/></g>
+<g class="clouds" opacity="0"><path d="M318 190c0-20 26-30 40-16 8-22 46-22 54 2 22-4 34 22 16 32h-98c-14-2-18-12-12-18Z" fill="#C9CED6" stroke="#141414" stroke-width="5"/>
+<path d="M440 150c0-22 30-32 44-14 10-24 52-22 58 4 24-2 34 26 14 36h-104c-16-2-20-14-12-26Z" fill="#B7BDC7" stroke="#141414" stroke-width="5"/>
+<path d="M500 236c0-16 22-24 34-12 8-18 40-16 44 4 18 0 26 20 10 28h-80c-12-2-14-12-8-20Z" fill="#C9CED6" stroke="#141414" stroke-width="5"/></g>
+<path class="street" d="M306 382H594" stroke="#9AA3AD" stroke-width="10"/>
+<g class="bus" transform="translate(-260 0)"><rect x="0" y="318" width="210" height="58" rx="12" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
+<rect x="0" y="352" width="210" height="10" fill="#FFD60A"/>
+<g fill="#9FD3F0" stroke="#141414" stroke-width="3"><rect x="12" y="326" width="28" height="20" rx="4"/><rect x="48" y="326" width="28" height="20" rx="4"/><rect x="84" y="326" width="28" height="20" rx="4"/><rect x="120" y="326" width="28" height="20" rx="4"/><rect x="156" y="326" width="28" height="20" rx="4"/></g>
+<rect x="186" y="326" width="18" height="30" rx="4" fill="#9FD3F0" stroke="#141414" stroke-width="3"/>
+<circle cx="44" cy="378" r="11" fill="#141414"/><circle cx="168" cy="378" r="11" fill="#141414"/></g>
+<g class="rain" opacity="0"><path d="M330 110l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M370 160l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M410 100l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M450 180l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M490 120l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M530 170l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M570 110l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M350 240l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M395 290l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M440 250l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M485 300l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M525 240l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M565 290l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M340 330l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M420 340l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M500 330l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M580 340l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M460 140l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M380 60l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/><path d="M540 70l-8 22" stroke="#3E5F9E" stroke-width="4" stroke-linecap="round"/></g>
 <g opacity=".5"><path d="M316 90V400" stroke="#fff" stroke-width="9"/><path d="M338 90V400" stroke="#fff" stroke-width="9"/><path d="M360 90V400" stroke="#fff" stroke-width="9"/><path d="M382 90V400" stroke="#fff" stroke-width="9"/><path d="M404 90V400" stroke="#fff" stroke-width="9"/><path d="M426 90V400" stroke="#fff" stroke-width="9"/><path d="M448 90V400" stroke="#fff" stroke-width="9"/><path d="M470 90V400" stroke="#fff" stroke-width="9"/><path d="M492 90V400" stroke="#fff" stroke-width="9"/><path d="M514 90V400" stroke="#fff" stroke-width="9"/><path d="M536 90V400" stroke="#fff" stroke-width="9"/><path d="M558 90V400" stroke="#fff" stroke-width="9"/><path d="M580 90V400" stroke="#fff" stroke-width="9"/></g></g>
 <path d="M450 96V400M306 300H594" stroke="#141414" stroke-width="6"/>
 <path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="none" stroke="#141414" stroke-width="8" stroke-linejoin="round"/>
 <path d="M292 400H608V418H292Z" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
 <!-- boogdeur met tocht -->
-<path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#3E6B57" stroke="#141414" stroke-width="7" stroke-linejoin="round"/>
+<path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#2A2622" stroke="#141414" stroke-width="7" stroke-linejoin="round"/>
+<path d="M60 560L194 560L180 520H74Z" fill="#3A332D"/>
+<g class="door" role="button" tabindex="0" aria-label="Open de deur">
+<g class="leaf"><path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#3E6B57" stroke="#141414" stroke-width="7" stroke-linejoin="round"/>
 <path d="M78 534V256A49 49 0 0 1 176 256V534Z" fill="none" stroke="#2C5242" stroke-width="5"/>
-<circle cx="186" cy="384" r="9" fill="#F5C400" stroke="#141414" stroke-width="4"/>
+<circle class="knob" cx="186" cy="384" r="9" fill="#F5C400" stroke="#141414" stroke-width="4"/></g></g>
 <g stroke="#2F6FD6" stroke-width="6" fill="none" stroke-linecap="round">
 <path class="gust" d="M210 470q40-14 80 0t70-6"/><path class="gust" d="M210 505q46-10 92 0t76 4"/><path class="gust" d="M210 540q40 8 80 0t66 8"/></g>
 <text x="232" y="452" class="lbl" fill="#2F6FD6">tocht</text>
@@ -244,6 +318,22 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <circle cx="822" cy="440" r="26" fill="#9BB9EE" stroke="#141414" stroke-width="5"/>
 <rect x="972" y="414" width="52" height="52" rx="12" fill="#E39B7B" stroke="#141414" stroke-width="5" transform="rotate(8 998 440)"/>
 <path d="M784 556l-6 22M1036 556l6 22" stroke="#8C5A3A" stroke-width="9" stroke-linecap="round"/>
+<!-- kat -->
+<g class="cat" opacity="0" transform="translate(127 596)">
+<g class="walk"><path class="tail" d="M-34 -30q-26-6-30-32" fill="none" stroke="var(--cat)" stroke-width="9" stroke-linecap="round"/>
+<g class="legs" stroke="var(--cat)" stroke-width="8" stroke-linecap="round"><path class="lg1" d="M-22 -14v14"/><path class="lg2" d="M-10 -14v14"/><path class="lg1" d="M14 -14v14"/><path class="lg2" d="M24 -14v14"/></g>
+<ellipse cx="0" cy="-26" rx="38" ry="18" fill="var(--cat)" stroke="#141414" stroke-width="4"/>
+<ellipse class="spot" cx="-6" cy="-30" rx="14" ry="9" fill="var(--spot)"/>
+<g transform="translate(38 -44)"><path d="M-14 -10l2-16 10 9ZM14 -10l-2-16-10 9Z" fill="var(--cat)" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle r="17" fill="var(--cat)" stroke="#141414" stroke-width="4"/><circle cx="-6" cy="-2" r="2.6" fill="#141414"/><circle cx="7" cy="-2" r="2.6" fill="#141414"/><path d="M-1 5l1 2 1-2" stroke="#141414" stroke-width="2" fill="none"/></g></g>
+<g class="lie" opacity="0"><path class="tail2" d="M30 -6q24 4 14-20" fill="none" stroke="var(--cat)" stroke-width="9" stroke-linecap="round"/>
+<path d="M-40 0c0-26 22-38 44-38s40 14 40 38Z" fill="var(--cat)" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<ellipse class="spot" cx="4" cy="-22" rx="14" ry="8" fill="var(--spot)"/>
+<g transform="translate(-36 -14)"><path d="M-13 -8l3-14 9 8ZM13 -8l-3-14-9 8Z" fill="var(--cat)" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+<circle r="15" fill="var(--cat)" stroke="#141414" stroke-width="4"/><path d="M-8 0q3 3 6 0M2 0q3 3 6 0" stroke="#141414" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>
+<text class="zzz" x="-30" y="-44" style="font:700 26px var(--hand)" fill="#141414">z z</text></g>
+</g>
+<rect class="nightveil" width="1200" height="700" fill="#1F2A4D" opacity="0" style="mix-blend-mode:multiply;pointer-events:none"/>
 <!-- labels -->
 <text x="1050" y="46" class="lbl" fill="#141414" opacity=".7" style="font-size:28px">donkere hoek</text>
 <text x="548" y="606" class="lbl" fill="#9A7400">licht</text>
@@ -296,6 +386,93 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
  let sx=null;
  stage.addEventListener('pointerdown',e=>{sx=e.clientX});
  stage.addEventListener('pointerup',e=>{if(sx===null)return;const dx=e.clientX-sx;sx=null;if(Math.abs(dx)>40)show(i+(dx<0?1:-1))});
+})();
+
+(function(){
+ const room=document.querySelector('svg.room');if(!room)return;
+ const $=c=>room.querySelector(c);
+ const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const sun=$('.sun'),moon=$('.moon'),stars=$('.stars'),sky=$('.sky'),veil=$('.nightveil'),glow=$('.lampglow'),beamw=$('.beamwrap'),beam=$('.beam'),clouds=$('.clouds'),rain=$('.rain'),bus=$('.bus');
+ let raining=Math.random()<.3;
+ const mix=(a,b,t)=>{const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')};
+ function sunTimes(d){
+  const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);
+  const len=12+4.3*Math.sin(2*Math.PI*(doy-80)/365);           // daglengte in België (uur)
+  const jan=new Date(d.getFullYear(),0,1).getTimezoneOffset(),jul=new Date(d.getFullYear(),6,1).getTimezoneOffset();
+  const dst=d.getTimezoneOffset()<Math.max(jan,jul);
+  const noon=dst?13.72:12.72;                                    // zonnemiddag Mechelen, ongeveer
+  return [noon-len/2,noon+len/2];
+ }
+ function tick(){
+  const d=new Date(),h=d.getHours()+d.getMinutes()/60,[rise,set]=sunTimes(d);
+  const t=(h-rise)/(set-rise),day=t>0&&t<1;
+  const edge=day?Math.min(t,1-t):0,twilight=day?Math.max(0,1-edge/.09):1;
+  // zon: van links laag naar rechts laag
+  const tc=Math.max(0,Math.min(1,t)),x=328+tc*244,y=372-Math.sin(Math.PI*tc)*236;
+  sun.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+  moon.setAttribute('transform','translate(380 150)');
+  sun.style.opacity=day?1:0;moon.style.opacity=day?0:1;stars.style.opacity=day?0:(raining?.15:1);
+  let col=day?mix('#BFE3FF','#F6B48B',twilight):'#22305A';
+  if(raining)col=mix(col,'#9AA3AD',day?.55:.3);
+  sky.setAttribute('fill',col);
+  veil.style.opacity=day?(twilight*.12+(raining?.08:0)):.26;
+  glow.style.opacity=day?(twilight*.5):.9;
+  beamw.style.opacity=day?(raining?.45:1)*(1-twilight*.4):.25;
+  const shift=day?(.5-tc)*90:0;                                    // ochtend valt licht naar rechts, avond naar links
+  beam.setAttribute('d',`M300 418H600L${(690+shift).toFixed(0)} 700H${(400+shift).toFixed(0)}Z`);
+  clouds.style.opacity=raining?1:0;rain.style.opacity=raining?1:0;
+ }
+ tick();setInterval(tick,30000);
+ // af en toe regen
+ setInterval(()=>{ if(!raining&&Math.random()<.25){raining=true;tick();setTimeout(()=>{raining=false;tick()},20000+Math.random()*25000)} },40000);
+ // af en toe een bus
+ function drive(){
+  if(RM)return;
+  const dir=Math.random()<.5?1:-1,dur=5200+Math.random()*2000,t0=performance.now();
+  bus.style.display='';
+  (function step(n){const p=Math.min(1,(n-t0)/dur);const x=dir>0?-260+p*900:640-p*900;
+   bus.setAttribute('transform',`translate(${x.toFixed(1)} 0)`+(dir<0?' translate(210 0) scale(-1 1)':''));
+   if(p<1)requestAnimationFrame(step);else setTimeout(drive,22000+Math.random()*38000)})(t0);
+ }
+ setTimeout(drive,5000+Math.random()*6000);
+
+ // deur + kat
+ const door=$('.door'),cat=$('.cat'),walk=cat.querySelector('.walk'),lie=cat.querySelector('.lie');
+ const FUR=[['#E39B5B','#F2C08F','rosse'],['#2B2826','#4A4440','zwarte'],['#9AA0A6','#C5CACE','grijze'],['#FFFDF6','#2B2826','zwart-witte'],['#E8D7BC','#B48B62','crèmekleurige']];
+ const SPOTS=[[870,470],[958,470],[905,404]];
+ let state='out',furI=Math.floor(Math.random()*FUR.length),spotI=0,busy=false;
+ const pos={x:127,y:596,f:1};
+ function place(){cat.setAttribute('transform',`translate(${pos.x.toFixed(1)} ${pos.y.toFixed(1)}) scale(${pos.f} 1)`)}
+ function move(tx,ty,ms,arc){return new Promise(res=>{
+   const sx=pos.x,sy=pos.y,t0=performance.now();pos.f=tx<sx?-1:1;
+   if(RM){pos.x=tx;pos.y=ty;place();return res()}
+   (function step(n){const p=Math.min(1,(n-t0)/ms),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    pos.x=sx+(tx-sx)*e;pos.y=sy+(ty-sy)*e-(arc?Math.sin(Math.PI*p)*arc:0);place();
+    p<1?requestAnimationFrame(step):res()})(t0)})}
+ const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
+ function setDoor(o){door.classList.toggle('open',o);door.setAttribute('aria-label',o?'Sluit de deur':'Open de deur')}
+ async function comeIn(){
+  busy=true;furI=(furI+1)%FUR.length;spotI=Math.floor(Math.random()*SPOTS.length);
+  const [c,sp]=FUR[furI];cat.style.setProperty('--cat',c);cat.style.setProperty('--spot',sp);
+  door.setAttribute('aria-label','Er komt een '+FUR[furI][2]+' kat binnen');
+  setDoor(true);await wait(700);
+  pos.x=127;pos.y=600;pos.f=1;place();walk.style.opacity=1;lie.style.opacity=0;cat.style.opacity=1;cat.classList.add('walking');
+  if(Math.random()<.4){await move(560,668,1700);cat.classList.remove('walking');await wait(1600);cat.classList.add('walking')}   // even in het zonnetje
+  const [tx,ty]=SPOTS[spotI];
+  await move(tx-70,610,1800);cat.classList.remove('walking');
+  await move(tx,ty,650,70);walk.style.opacity=0;lie.style.opacity=1;pos.f=Math.random()<.5?1:-1;place();
+  setDoor(false);state='in';busy=false;door.setAttribute('aria-label','Open de deur: de kat gaat weer weg');
+ }
+ async function goOut(){
+  busy=true;setDoor(true);await wait(500);
+  lie.style.opacity=0;walk.style.opacity=1;
+  await move(pos.x-70,610,600,60);cat.classList.add('walking');
+  await move(127,600,2000);cat.style.opacity=0;cat.classList.remove('walking');
+  await wait(300);setDoor(false);state='out';busy=false;
+ }
+ function knock(){ if(busy)return; state==='out'?comeIn():goOut(); }
+ door.addEventListener('click',knock);
+ door.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();knock()}});
 })();
 </script>
 </body>
