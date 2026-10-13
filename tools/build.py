@@ -489,39 +489,61 @@ ICON = {
 
 def room_svg(links):
     I = INK
-    planks = ''.join(f'<path d="M0 {y}H1200" stroke="#B9814F" stroke-width="3"/>' for y in (600, 645))
-    planks += ''.join(f'<path d="M{x} {y1}v{45}" stroke="#B9814F" stroke-width="3"/>' for x, y1 in [(140,560),(420,560),(760,560),(1010,560),(260,600),(600,600),(900,600),(80,645),(470,645),(830,645),(1110,645)])
-    dots = ''.join(f'<circle cx="{x}" cy="{y}" r="3" fill="#F0DFA8"/>' for y in range(40, 540, 60) for x in range(30 + (y // 60 % 2) * 30, 1200, 60))
-    base = f'''<rect width="1200" height="700" fill="#FFF8E1"/>{dots}
+    WALL, ARCH, OAK, OAKLINE = '#F6EFE2', '#E9A27F', '#EBCB9C', '#D2A774'
+    boards = ''.join(f'<path d="M{x} 560L{x + (x - 600) * 0.35:.0f} 700" stroke="{OAKLINE}" stroke-width="3"/>' for x in range(-100, 1400, 110))
+    checks = ''
+    for r in range(3):
+        for c in range(16):
+            if (r + c) % 2 == 0:
+                checks += f'<rect x="{612 + c * 25}" y="{612 + r * 22}" width="25" height="22" fill="#E39B7B"/>'
+    boucle = ''.join(f'<circle cx="{x}" cy="{y}" r="2.2" fill="#D8C9B0"/>' for y in range(410, 556, 14) for x in range(770 + (y // 14 % 2) * 7, 1060, 14))
+    base = f'''<rect width="1200" height="700" fill="{WALL}"/>
+<!-- geschilderde boog achter de zetel -->
+<path d="M742 560V330A150 150 0 0 1 1042 330V560Z" fill="{ARCH}"/>
+<!-- papieren hanglamp -->
+<path d="M690 0V108" stroke="{I}" stroke-width="3"/>
+<circle cx="690" cy="148" r="40" fill="#FFFDF6" stroke="{I}" stroke-width="5"/>
+<path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/>
+<!-- prent naast het raam -->
+<rect x="216" y="196" width="72" height="96" rx="4" fill="#FFFDF6" stroke="{I}" stroke-width="5"/>
+<circle cx="242" cy="230" r="15" fill="#E39B7B"/>
+<path d="M226 276q14-26 28-6t26-14" stroke="#2F6FD6" stroke-width="5" fill="none" stroke-linecap="round"/>
+<!-- donkere hoek -->
 <path d="M1040 0H1200V560H1040Z" fill="{I}" opacity=".13"/>
 <path d="M1040 0V560" stroke="{I}" stroke-width="2" stroke-dasharray="6 10" opacity=".35"/>
-<rect y="560" width="1200" height="140" fill="#E2B07A"/>{planks}
+<!-- vloer -->
+<rect y="560" width="1200" height="140" fill="{OAK}"/>{boards}
+<rect x="606" y="606" width="412" height="78" rx="14" fill="#F6EBD8" stroke="{I}" stroke-width="5"/>
+<g clip-path="url(#rug)">{checks}</g>
+<clipPath id="rug"><rect x="612" y="612" width="400" height="66" rx="9"/></clipPath>
 <path d="M1040 560L1200 560V700H980Z" fill="{I}" opacity=".13"/>
 <path d="M0 560H1200" stroke="{I}" stroke-width="6"/>
-<!-- raam met vitrage -->
+<!-- boograam met vitrage -->
 <path d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/>
-<rect x="306" y="96" width="288" height="304" fill="#BFE3FF" stroke="{I}" stroke-width="7"/>
-<circle cx="540" cy="150" r="34" fill="#F5C400" stroke="{I}" stroke-width="5"/>
-<path d="M450 96V400M306 248H594" stroke="{I}" stroke-width="6"/>
-<g opacity=".55">{''.join(f'<path d="M{x} 100V396" stroke="#fff" stroke-width="9"/>' for x in range(318, 594, 22))}</g>
-<path d="M292 400H608V418H292Z" fill="#fff" stroke="{I}" stroke-width="5"/>
-<path d="M282 82H618" stroke="{I}" stroke-width="7" stroke-linecap="round"/>
-<path d="M286 86c18 120-8 230 12 330h-30c-10-110 8-220 2-330Z" fill="#F59AA5" stroke="{I}" stroke-width="5" stroke-linejoin="round"/>
-<path d="M614 86c-18 120 8 230-12 330h30c10-110-8-220-2-330Z" fill="#F59AA5" stroke="{I}" stroke-width="5" stroke-linejoin="round"/>
-<!-- deur met tocht -->
-<rect x="52" y="172" width="150" height="388" fill="#C98B5E" stroke="{I}" stroke-width="7"/>
-<rect x="76" y="200" width="102" height="140" rx="6" fill="none" stroke="{I}" stroke-width="4"/>
-<rect x="76" y="370" width="102" height="160" rx="6" fill="none" stroke="{I}" stroke-width="4"/>
-<circle cx="184" cy="372" r="8" fill="#F5C400" stroke="{I}" stroke-width="4"/>
+<clipPath id="win"><path d="M306 400V240A144 144 0 0 1 594 240V400Z"/></clipPath>
+<path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="#BFE3FF"/>
+<g clip-path="url(#win)"><circle cx="520" cy="172" r="28" fill="#F5C400" stroke="{I}" stroke-width="5"/>
+<g opacity=".5">{''.join(f'<path d="M{x} 90V400" stroke="#fff" stroke-width="9"/>' for x in range(316, 594, 22))}</g></g>
+<path d="M450 96V400M306 300H594" stroke="{I}" stroke-width="6"/>
+<path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="none" stroke="{I}" stroke-width="8" stroke-linejoin="round"/>
+<path d="M292 400H608V418H292Z" fill="#FFFDF6" stroke="{I}" stroke-width="5"/>
+<!-- boogdeur met tocht -->
+<path d="M52 560V247A75 75 0 0 1 202 247V560Z" fill="#3E6B57" stroke="{I}" stroke-width="7" stroke-linejoin="round"/>
+<path d="M78 534V256A49 49 0 0 1 176 256V534Z" fill="none" stroke="#2C5242" stroke-width="5"/>
+<circle cx="186" cy="384" r="9" fill="#F5C400" stroke="{I}" stroke-width="4"/>
 <g stroke="#2F6FD6" stroke-width="6" fill="none" stroke-linecap="round">
 <path class="gust" d="M210 470q40-14 80 0t70-6"/><path class="gust" d="M210 505q46-10 92 0t76 4"/><path class="gust" d="M210 540q40 8 80 0t66 8"/></g>
 <text x="232" y="452" class="lbl" fill="#2F6FD6">tocht</text>
-<!-- zetel -->
-<path d="M760 452h300v108H760Z" fill="#7FA4E6" stroke="{I}" stroke-width="6" stroke-linejoin="round"/>
-<path d="M776 400h268v60H776Z" fill="#9BB9EE" stroke="{I}" stroke-width="6" stroke-linejoin="round"/>
-<path d="M742 430h44v130h-44ZM1034 430h44v130h-44Z" fill="#7FA4E6" stroke="{I}" stroke-width="6" stroke-linejoin="round"/>
-<path d="M770 560v22M1050 560v22" stroke="{I}" stroke-width="8" stroke-linecap="round"/>
-<!-- donkere hoek -->
+<!-- boucle-zetel -->
+<rect x="776" y="392" width="268" height="86" rx="38" fill="#F2E8D8" stroke="{I}" stroke-width="6"/>
+<rect x="748" y="452" width="324" height="104" rx="34" fill="#F2E8D8" stroke="{I}" stroke-width="6"/>
+<clipPath id="sofa"><rect x="779" y="395" width="262" height="53" rx="35"/><rect x="751" y="458" width="318" height="95" rx="31"/></clipPath>
+<g clip-path="url(#sofa)">{boucle}</g>
+<path d="M780 476h260" stroke="{I}" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+<circle cx="822" cy="440" r="26" fill="#9BB9EE" stroke="{I}" stroke-width="5"/>
+<rect x="972" y="414" width="52" height="52" rx="12" fill="#E39B7B" stroke="{I}" stroke-width="5" transform="rotate(8 998 440)"/>
+<path d="M784 556l-6 22M1036 556l6 22" stroke="#8C5A3A" stroke-width="9" stroke-linecap="round"/>
+<!-- labels -->
 <text x="1050" y="46" class="lbl" fill="{I}" opacity=".7" style="font-size:28px">donkere hoek</text>
 <text x="548" y="606" class="lbl" fill="#9A7400">licht</text>
 <!-- vrij plekje op de vensterbank -->
@@ -557,10 +579,10 @@ body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)
 .wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
 h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
 .hand{font:700 clamp(26px,5.4vw,36px)/1 var(--hand);margin:8px 0 20px}
-.roomwrap{border:3px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);overflow-x:auto;overflow-y:hidden;background:#FFF8E1;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.roomwrap{border:3px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);overflow-x:auto;overflow-y:hidden;background:#F6EFE2;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 svg.room{display:block;height:clamp(380px,68vh,600px);width:auto;max-width:none}
 @media (min-width:900px){svg.room{width:100%;height:auto}}
-.mini{position:relative;width:max-content;margin:14px auto 4px;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#FFF8E1;cursor:pointer;touch-action:none}
+.mini{position:relative;width:max-content;margin:14px auto 4px;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#F6EFE2;cursor:pointer;touch-action:none}
 .mini .minisvg{display:block;height:72px;width:auto}
 .mini .minisvg .gust{animation:none;stroke-dashoffset:0}
 .mini .vp{position:absolute;top:0;bottom:0;left:0;border:3px solid var(--ink);border-radius:6px;background:rgba(255,214,10,.28);box-sizing:border-box}
