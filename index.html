@@ -20,7 +20,7 @@ body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)
 .wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
 h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
 .hand{font:700 clamp(26px,5.4vw,36px)/1 var(--hand);margin:8px 0 20px}
-.roomwrap{border-radius:22px;overflow-x:auto;overflow-y:hidden;background:#F6EFE2;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.roomwrap{border:3px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);overflow-x:auto;overflow-y:hidden;background:#F6EFE2;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 svg.room{display:block;height:clamp(380px,68vh,600px);width:auto;max-width:none}
 @media (min-width:900px){svg.room{width:100%;height:auto}}
 .mini{position:relative;width:max-content;margin:14px auto 4px;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#F6EFE2;cursor:pointer;touch-action:none}
@@ -59,7 +59,10 @@ svg.room .knob{transform-box:fill-box;transform-origin:center}
 svg.room .rain path{animation:rain .7s linear infinite}
 svg.room .rain path:nth-child(3n){animation-delay:-.25s}svg.room .rain path:nth-child(3n+1){animation-delay:-.5s}
 @keyframes rain{from{transform:translate(0,-60px)}to{transform:translate(-16px,60px)}}
-svg.room .cat{--cat:#E39B5B;--spot:#F2C08F;pointer-events:none}
+svg.room .cat{--cat:#E39B5B;--spot:#F2C08F;pointer-events:none;outline:none}
+svg.room .cat.home{pointer-events:auto;cursor:pointer}
+svg.room .cat.home:hover .lie{filter:drop-shadow(0 0 6px rgba(255,214,10,.9))}
+svg.room .cat:focus-visible .lie{filter:drop-shadow(0 0 0 #5B2A9E) drop-shadow(0 0 4px #5B2A9E)}
 svg.room .cat .legs path{transform-box:fill-box;transform-origin:50% 0}
 svg.room .cat.walking .lg1{animation:leg .36s ease-in-out infinite alternate}
 svg.room .cat.walking .lg2{animation:leg .36s ease-in-out infinite alternate-reverse}
@@ -169,10 +172,6 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <g class="swing"><path d="M690 0V108" stroke="#141414" stroke-width="3"/>
 <circle cx="690" cy="148" r="40" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
 <path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/></g>
-<!-- prent naast het raam -->
-<rect x="216" y="196" width="72" height="96" rx="4" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
-<circle cx="242" cy="230" r="15" fill="#E39B7B"/>
-<path d="M226 276q14-26 28-6t26-14" stroke="#2F6FD6" stroke-width="5" fill="none" stroke-linecap="round"/>
 <!-- donkere hoek -->
 <path d="M1040 0H1200V560H1040Z" fill="#141414" opacity=".13"/>
 <path d="M1040 0V560" stroke="#141414" stroke-width="2" stroke-dasharray="6 10" opacity=".35"/>
@@ -263,10 +262,6 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
 <g class="swing"><path d="M690 0V108" stroke="#141414" stroke-width="3"/>
 <circle cx="690" cy="148" r="40" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
 <path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/></g>
-<!-- prent naast het raam -->
-<rect x="216" y="196" width="72" height="96" rx="4" fill="#FFFDF6" stroke="#141414" stroke-width="5"/>
-<circle cx="242" cy="230" r="15" fill="#E39B7B"/>
-<path d="M226 276q14-26 28-6t26-14" stroke="#2F6FD6" stroke-width="5" fill="none" stroke-linecap="round"/>
 <!-- donkere hoek -->
 <path d="M1040 0H1200V560H1040Z" fill="#141414" opacity=".13"/>
 <path d="M1040 0V560" stroke="#141414" stroke-width="2" stroke-dasharray="6 10" opacity=".35"/>
@@ -462,16 +457,21 @@ button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2
   await move(tx-70,610,1800);cat.classList.remove('walking');
   await move(tx,ty,650,70);walk.style.opacity=0;lie.style.opacity=1;pos.f=Math.random()<.5?1:-1;place();
   setDoor(false);state='in';busy=false;door.setAttribute('aria-label','Open de deur: de kat gaat weer weg');
+  cat.classList.add('home');cat.setAttribute('tabindex','0');cat.setAttribute('role','button');cat.setAttribute('aria-label','Jaag de '+FUR[furI][2]+' kat buiten');
  }
- async function goOut(){
-  busy=true;setDoor(true);await wait(500);
+ async function goOut(shoo){
+  busy=true;cat.classList.remove('home');cat.removeAttribute('tabindex');cat.removeAttribute('role');cat.removeAttribute('aria-label');
+  if(shoo){lie.style.opacity=0;walk.style.opacity=1;await move(pos.x,pos.y-46,260);await move(pos.x,pos.y+46,200)}  // schrikt op
+  setDoor(true);await wait(shoo?150:500);
   lie.style.opacity=0;walk.style.opacity=1;
-  await move(pos.x-70,610,600,60);cat.classList.add('walking');
-  await move(127,600,2000);cat.style.opacity=0;cat.classList.remove('walking');
+  await move(pos.x-70,610,shoo?380:600,60);cat.classList.add('walking');
+  await move(127,600,shoo?1100:2000);cat.style.opacity=0;cat.classList.remove('walking');
   await wait(300);setDoor(false);state='out';busy=false;
  }
  function knock(){ if(busy)return; state==='out'?comeIn():goOut(); }
  door.addEventListener('click',knock);
+ cat.addEventListener('click',()=>{ if(!busy&&state==='in')goOut(true) });
+ cat.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!busy&&state==='in'){e.preventDefault();goOut(true)}});
  door.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();knock()}});
 })();
 </script>
