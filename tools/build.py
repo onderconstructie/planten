@@ -616,7 +616,7 @@ body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--display)
 .wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:32px 56px}
 h1{font:800 clamp(48px,11vw,104px)/.88 var(--display);letter-spacing:-.04em;margin:0;text-wrap:balance}
 .hand{font:700 clamp(26px,5.4vw,36px)/1 var(--hand);margin:8px 0 20px}
-.roomwrap{border:3px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);overflow-x:auto;overflow-y:hidden;background:#F6EFE2;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.roomwrap{border-radius:22px;overflow-x:auto;overflow-y:hidden;background:#F6EFE2;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 svg.room{display:block;height:clamp(380px,68vh,600px);width:auto;max-width:none}
 @media (min-width:900px){svg.room{width:100%;height:auto}}
 .mini{position:relative;width:max-content;margin:14px auto 4px;border:3px solid var(--ink);border-radius:10px;overflow:hidden;background:#F6EFE2;cursor:pointer;touch-action:none}
