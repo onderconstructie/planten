@@ -194,7 +194,37 @@ svg.art{width:86cqw;height:auto;overflow:visible}
   .toc button[aria-current="step"]::before{opacity:1}
   .toc button:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
 }
+
+/* --- soepele beweging in de reels --- */
+.scene{transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .75s cubic-bezier(.2,.8,.2,1),filter .55s cubic-bezier(.4,0,.2,1);transform:scale(1.035);filter:blur(5px)}
+.scene.on{transform:none;filter:none}
+.scene.on .a{animation:pop .75s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes pop{0%{opacity:0;transform:translateY(18px);filter:blur(6px)}100%{opacity:1;transform:none;filter:none}}
+.scene.on .grow,.scene.on .rise{animation-duration:.9s;animation-timing-function:cubic-bezier(.2,.9,.3,1.08)}
+.bars i b{transition:width .12s linear}
+@media (prefers-reduced-motion:reduce){.scene{transform:none;filter:none;transition:opacity .2s}}
 </style>
+<style id="smooth">/* Gedeelde afwerking voor de hele app: overgangen, korrel, soepele knoppen. */
+
+/* vloeiende overgang tussen kamer en reels (browsers die het kennen) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vtOut .32s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vtIn .48s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vtOut{to{opacity:0;transform:scale(.985);filter:blur(4px)}}
+@keyframes vtIn{from{opacity:0;transform:translateY(18px) scale(1.01);filter:blur(6px)}}
+
+/* fijne papierkorrel over het geheel */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.07;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* soepele knoppen */
+button,.home,.chip,.how-btn .pen{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s cubic-bezier(.2,.8,.2,1),background-color .25s,color .25s}
+
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+}
+</style>
+
 
 </head>
 <body>
@@ -522,6 +552,7 @@ svg.art{width:86cqw;height:auto;overflow:visible}
   const on=scenes.findIndex(s=>s.classList.contains('on')); mark(on<0?0:on);
 })();
 </script>
+
 
 
 </body>

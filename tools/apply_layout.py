@@ -4,6 +4,7 @@ import sys, os, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 CSS = open(os.path.join(HERE, 'layout.css')).read()
 JS = open(os.path.join(HERE, 'layout.js')).read()
+SMOOTH = open(os.path.join(HERE, 'smooth.css')).read()
 HOOK_A = "fills.forEach((f,i)=>f.style.width=i<idx?'100%':'0%');"
 HOOK_A2 = HOOK_A + "\n    document.dispatchEvent(new CustomEvent('reel:scene',{detail:idx}));"
 SETPLAY = re.compile(r"(  function setPlay\(p\)\{[^\n]*\})")
@@ -16,7 +17,8 @@ def patch(s):
         assert 'window.__reel' in s
     s = re.sub(r'<style id="layout">.*?</style>', '', s, flags=re.S)
     s = re.sub(r'<script id="layout-js">.*?</script>', '', s, flags=re.S)
-    s = s.replace('</style>', '</style>\n<style id="layout">' + CSS + '</style>', 1)
+    s = re.sub(r'<style id="smooth">.*?</style>', '', s, flags=re.S)
+    s = s.replace('</style>', '</style>\n<style id="layout">' + CSS + '</style>\n<style id="smooth">' + SMOOTH + '</style>', 1)
     i = s.rfind('</script>') + len('</script>')
     s = s[:i] + '\n<script id="layout-js">' + JS + '</script>' + s[i:]
     return s

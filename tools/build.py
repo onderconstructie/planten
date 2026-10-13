@@ -178,10 +178,12 @@ def page(slug, title, desc, scenes, extra_css=''):
     _here = os.path.dirname(os.path.abspath(__file__))
     LAYOUT_CSS = open(os.path.join(_here, 'layout.css')).read()
     LAYOUT_JS = open(os.path.join(_here, 'layout.js')).read()
+    SMOOTH_CSS = open(os.path.join(_here, 'smooth.css')).read()
     core = f"""<title>{title}</title>
 {FONTS}
 <style>{css}{extra_css}</style>
 <style id="layout">{LAYOUT_CSS}</style>
+<style id="smooth">{SMOOTH_CSS}</style>
 """
     navattr = ''
     hint = 'Veeg ← → door de fiche'
@@ -501,9 +503,9 @@ def room_svg(links):
 <!-- geschilderde boog achter de zetel -->
 <path d="M742 560V330A150 150 0 0 1 1042 330V560Z" fill="{ARCH}"/>
 <!-- papieren hanglamp -->
-<path d="M690 0V108" stroke="{I}" stroke-width="3"/>
+<g class="swing"><path d="M690 0V108" stroke="{I}" stroke-width="3"/>
 <circle cx="690" cy="148" r="40" fill="#FFFDF6" stroke="{I}" stroke-width="5"/>
-<path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/>
+<path d="M652 138q38 14 76 0M654 160q36 12 72 0" stroke="#D8C9B0" stroke-width="3" fill="none"/></g>
 <!-- prent naast het raam -->
 <rect x="216" y="196" width="72" height="96" rx="4" fill="#FFFDF6" stroke="{I}" stroke-width="5"/>
 <circle cx="242" cy="230" r="15" fill="#E39B7B"/>
@@ -519,7 +521,7 @@ def room_svg(links):
 <path d="M1040 560L1200 560V700H980Z" fill="{I}" opacity=".13"/>
 <path d="M0 560H1200" stroke="{I}" stroke-width="6"/>
 <!-- boograam met vitrage -->
-<path d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/>
+<path class="beam" d="M300 418H600L690 700H400Z" fill="#FFE24A" opacity=".45"/>
 <clipPath id="win"><path d="M306 400V240A144 144 0 0 1 594 240V400Z"/></clipPath>
 <path d="M306 400V240A144 144 0 0 1 594 240V400Z" fill="#BFE3FF"/>
 <g clip-path="url(#win)"><circle cx="520" cy="172" r="28" fill="#F5C400" stroke="{I}" stroke-width="5"/>
@@ -559,7 +561,8 @@ def room_svg(links):
         tip = f'{plain}' + (' (kan ook hier)' if ghost else '')
         return (f'<a class="{cls}" href="{href}" aria-label="{label}"><title>{tip}</title>{h}'
                 f'<rect class="hit" x="{x-125*s:.0f}" y="{y-335*s:.0f}" width="{250*s:.0f}" height="{335*s:.0f}"/>'
-                f'<g class="lift"><g transform="translate({x-150*s:.1f} {y-325*s:.1f}) scale({s})">{pl["art"]()}</g></g></a>')
+                f'<g class="lift"><g class="enter" style="--d:{len(_order)*0.12:.2f}s"><g class="sway" style="--t:{5.2+len(_order)%3*0.9:.1f}s"><g transform="translate({x-150*s:.1f} {y-325*s:.1f}) scale({s})">{pl["art"]()}</g></g></g></g></a>' + ('' if _order.append(1) else ''))
+    _order = []
     ghosts, plants = '', ''
     for pl in PLANTS:
         href = links.get(pl['slug'], pl['slug'] + '/')
@@ -595,8 +598,19 @@ svg.room .gust{stroke-dasharray:120;stroke-dashoffset:120;animation:gust 1.6s ea
 svg.room .gust:nth-of-type(2){animation-delay:.5s}svg.room .gust:nth-of-type(3){animation-delay:1s}
 @keyframes gust{0%{stroke-dashoffset:120;opacity:1}100%{stroke-dashoffset:-120;opacity:0}}
 .pl{cursor:pointer;outline:none}
-.pl .lift{transition:transform .25s}
-.pl:hover .lift,.pl:focus-visible .lift{transform:translateY(-8px)}
+.pl .lift{transition:transform .45s cubic-bezier(.2,.8,.2,1);transform-box:fill-box;transform-origin:50% 100%}
+.pl:hover .lift,.pl:focus-visible .lift{transform:translateY(-10px) scale(1.04)}
+.pl .enter{animation:plIn .9s cubic-bezier(.2,.8,.2,1) var(--d,0s) both}
+@keyframes plIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.pl .sway{transform-box:fill-box;transform-origin:50% 100%;animation:plSway var(--t,6s) ease-in-out infinite}
+@keyframes plSway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.pl.ghost .lift{animation:ghost 4s ease-in-out infinite}
+@keyframes ghost{0%,100%{opacity:.3}50%{opacity:.5}}
+svg.room .swing{transform-box:view-box;transform-origin:690px 0;animation:swing 7s ease-in-out infinite}
+@keyframes swing{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+svg.room .beam{animation:beam 6s ease-in-out infinite}
+@keyframes beam{0%,100%{opacity:.36}50%{opacity:.52}}
+.minisvg .sway,.minisvg .swing,.minisvg .beam,.minisvg .enter,.minisvg .lift{animation:none!important}
 .pl .hit{fill:transparent}
 .pl.ghost .lift{opacity:.38;filter:grayscale(1)}
 .pl.ghost path[stroke]{opacity:.5}
@@ -660,7 +674,7 @@ h2.all{font:800 clamp(28px,6vw,44px)/1 var(--display);letter-spacing:-.03em;marg
 .foot{margin-top:40px;font:700 22px/1.2 var(--hand);max-width:52ch}
 @media (max-width:520px){.mosaic{grid-auto-rows:215px}}
 @media (max-width:360px){.mosaic{grid-template-columns:1fr}.tile.big,.tile.wide{grid-column:span 1}}
-@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}svg.room .gust{animation:none;stroke-dashoffset:0}.mini .hand{animation:none}}
+@media (prefers-reduced-motion:reduce){.tile,.pl .lift{transition:none}.pl .enter,.pl .sway,.pl.ghost .lift,svg.room .swing,svg.room .beam{animation:none}svg.room .gust{animation:none;stroke-dashoffset:0}.mini .hand{animation:none}}
 """
 
 OV_JS = r"""
@@ -676,9 +690,9 @@ OV_JS = r"""
  start=w.scrollLeft;sync();
  w.addEventListener('scroll',()=>{sync();if(Math.abs(w.scrollLeft-start)>20)mini.classList.add('moved')},{passive:true});
  window.addEventListener('resize',sync);
- function jump(e){const r=mini.getBoundingClientRect();const f=(e.clientX-r.left)/r.width;w.scrollLeft=f*w.scrollWidth-w.clientWidth/2;mini.classList.add('moved')}
+ function jump(e,smooth){const r=mini.getBoundingClientRect();const f=(e.clientX-r.left)/r.width;w.scrollTo({left:f*w.scrollWidth-w.clientWidth/2,behavior:smooth?'smooth':'auto'});mini.classList.add('moved')}
  let drag=false;
- mini.addEventListener('pointerdown',e=>{drag=true;mini.setPointerCapture(e.pointerId);jump(e)});
+ mini.addEventListener('pointerdown',e=>{drag=true;mini.setPointerCapture(e.pointerId);jump(e,true)});
  mini.addEventListener('pointermove',e=>{if(drag)jump(e)});
  mini.addEventListener('pointerup',()=>{drag=false});
 })();
@@ -729,7 +743,8 @@ def build_overview():
     mini_svg = _re.sub(r'<rect class="hit"[^>]*/>', '', mini_svg)
     mini_svg = _re.sub(r'<a class="([^"]*)"[^>]*>', r'<g class="\1">', mini_svg).replace('</a>', '</g>').replace('class="room"', 'class="minisvg"').replace(' role="group" aria-label="Huiskamer met de planten op hun plek"', ' focusable="false"')
     defs = f'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>{PL_LEAF}{FI_LEAF}</defs></svg>'
-    core = f'<title>Snap je plant</title>\n{FONTS}\n<style>{OV_CSS}</style>\n'
+    SMOOTH_CSS = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'smooth.css')).read()
+    core = f'<title>Snap je plant</title>\n{FONTS}\n<style>{OV_CSS}</style>\n<style id="smooth">{SMOOTH_CSS}</style>\n'
     main = (f'{defs}<div class="wrap">\n'
             f'<h1>Snap je plant</h1><p class="hand">waar zet ik mijn plant? klik erop</p>\n'
             f'<div class="roomwrap">{room_svg(links)}</div>\n'
